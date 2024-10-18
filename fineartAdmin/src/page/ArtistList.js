@@ -13,8 +13,9 @@ const ArtistList = () => {
   const fetchArtists = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/artists`);
-      setArtists(response.data.artists);
-      setFilteredArtists(response.data.artists);
+      const sortedArtists = response.data.artists.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      setArtists(sortedArtists);
+      setFilteredArtists(sortedArtists);
     } catch (error) {
       console.error('작가 목록을 가져오는 중 오류 발생:', error);
     }

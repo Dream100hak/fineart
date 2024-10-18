@@ -15,18 +15,14 @@
 
 /* 링크가 방문된 후에도 동일하게 보이도록 설정 */
 #homePageSubTitle:visited {
-  color: #ffffff; /* 방문 후에도 같은 색 */
-  text-decoration: none; /* 방문 후에도 밑줄 제거 */
+  color: #ffffff; 
+  text-decoration: none; 
 }
 
-/* 링크에 마우스를 올렸을 때 색상 변경 */
 #homePageSubTitle:hover {
-  color: #95bce7; /* 마우스 오버 시 색상 */
+  color: #95bce7; 
 }
 
-
-
-/* 전체 레이아웃 */
 .section.gnb_sec {
   background-color: #fff;
 }

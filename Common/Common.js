@@ -3,9 +3,11 @@ export const getCanvasSizes = async () => {
   const sizes = { F: {}, P: {}, M: {} };
 
   try {
-    // 텍스트 파일 읽기
-    const response = await fetch('/canvas_sizes.txt');
+    // Common 폴더의 텍스트 파일 읽기
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/canvas-sizes`);
+
     const data = await response.text();
+    console.log("canvas size : " +  data);
 
     // 텍스트 파일 파싱
     data.split('\n').forEach(line => {

@@ -34,6 +34,10 @@ app.get('/', (req, res) => {
   res.send('백엔드 서버가 실행 중입니다!');
 });
 
+app.get('/api/canvas-sizes', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Common/canvas_sizes.txt'));
+});
+
 // 에러 핸들링 미들웨어 추가
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {

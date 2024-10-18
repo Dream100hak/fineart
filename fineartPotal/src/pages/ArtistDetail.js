@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArtistContext } from '../ArtistContext';
 import '../css/ArtistDetail.css';
 import axios from 'axios';
-import { getCanvasSizes } from './Common';
+import { getCanvasSizes } from 'Common';
 
 const ArtistDetail = () => {
   const { id } = useParams();

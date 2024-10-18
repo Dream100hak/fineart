@@ -1,11 +1,14 @@
 // ArtistRegistration.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ArtistRegistration.css';
 import axios from 'axios';
-import { getCanvasSizes } from './Common';
+import { getCanvasSizes } from 'Common';
 import ArtworkModal from './ArtworkModal';
 
 const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
+  
+  const navigate = useNavigate(); // 페이지 이동을 위한 훅
   const isEditMode = !!artist;
 
   const [artistName, setArtistName] = useState('');
@@ -152,6 +155,8 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
   };
 
   const handleSubmit = async () => {
+ 
+
     const artistData = {
       name: artistName,
       description: artistDescription,
@@ -261,6 +266,9 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
       if (onClose) {
         onClose();
       }
+
+      navigate('/artist-management');
+      
     } catch (error) {
       alert('작가 정보 저장 중 오류가 발생했습니다.');
       console.error('Error:', error);
