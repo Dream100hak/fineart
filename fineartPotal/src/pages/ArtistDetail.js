@@ -115,22 +115,22 @@ const ArtistDetail = () => {
               alt={artworks[selectedArtworkIndex].title}
               className="modal-image"
             />
-            <div className="modal-navigation">
-              <button
-                className="modal-nav-button"
-                onClick={handlePrevArtwork}
-                disabled={selectedArtworkIndex === 0}
-              >
-                &#8592;
-              </button>
-              <button
-                className="modal-nav-button"
-                onClick={handleNextArtwork}
-                disabled={selectedArtworkIndex === artworks.length - 1}
-              >
-                &#8594;
-              </button>
-            </div>
+          </div>
+          <div className="modal-navigation" onClick={(e) => e.stopPropagation()}>
+            <button
+              className="modal-nav-button"
+              onClick={handlePrevArtwork}
+              disabled={selectedArtworkIndex === 0}
+            >
+              &#8592;
+            </button>
+            <button
+              className="modal-nav-button"
+              onClick={handleNextArtwork}
+              disabled={selectedArtworkIndex === artworks.length - 1}
+            >
+              &#8594;
+            </button>
           </div>
         </div>
       )}
@@ -149,8 +149,7 @@ const ArtistDetail = () => {
                 className="artwork-image"
               />
               <p>{
-                `${artwork.canvas_type ? artwork.canvas_type : 'Unknown type'}형 ${artwork.canvas_size ? artwork.canvas_size : 'Unknown size'}호 (${
-                  artwork.canvas_type && artwork.canvas_size && canvasSizes[artwork.canvas_type]?.[artwork.canvas_size] ? canvasSizes[artwork.canvas_type][artwork.canvas_size] : 'Unknown size'
+                `${artwork.canvas_type ? artwork.canvas_type : 'Unknown type'}형 ${artwork.canvas_size ? artwork.canvas_size : 'Unknown size'}호 (${artwork.canvas_type && artwork.canvas_size && canvasSizes[artwork.canvas_type]?.[artwork.canvas_size] ? canvasSizes[artwork.canvas_type][artwork.canvas_size] : 'Unknown size'
                 }) - ${artwork.title}`
               }</p>
             </div>
