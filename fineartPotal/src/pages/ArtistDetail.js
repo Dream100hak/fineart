@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ArtistContext } from '../ArtistContext';
 import '../css/ArtistDetail.css';
 import axios from 'axios';
@@ -7,13 +7,19 @@ import { getCanvasSizes } from 'Common';
 
 const ArtistDetail = () => {
   const { id } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { artists, totalArtists } = useContext(ArtistContext);
+  const { artistGroups } = useContext(ArtistContext);
   const [artist, setArtist] = useState(null);
   const [artworks, setArtworks] = useState([]);
   const [selectedArtworkIndex, setSelectedArtworkIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [canvasSizes, setCanvasSizes] = useState({});
+
+  // 현재 그룹 정보
+  const currentGroup = location.state?.group;
+  const currentGroupArtists = artistGroups[currentGroup] || [];
+  const currentIndex = currentGroupArtists.findIndex((artist) => artist.id === Number(id));
 
   useEffect(() => {
     fetchCanvasSizes();
@@ -36,17 +42,21 @@ const ArtistDetail = () => {
   };
 
   const handlePreviousArtist = () => {
-    const previousId = Number(id) - 1;
-    navigate(`/artist/${previousId}`);
+    if (currentIndex > 0) {
+      const previousArtistId = currentGroupArtists[currentIndex - 1].id;
+      navigate(`/artist/${previousArtistId}`, { state: { group: currentGroup } });
+    }
   };
 
   const handleNextArtist = () => {
-    const nextId = Number(id) + 1;
-    navigate(`/artist/${nextId}`);
+    if (currentIndex < currentGroupArtists.length - 1) {
+      const nextArtistId = currentGroupArtists[currentIndex + 1].id;
+      navigate(`/artist/${nextArtistId}`, { state: { group: currentGroup } });
+    }
   };
 
-  const hasPreviousArtist = id > 1;
-  const hasNextArtist = Number(id) < totalArtists;
+  const hasPreviousArtist = currentIndex > 0;
+  const hasNextArtist = currentIndex < currentGroupArtists.length - 1;
 
   const handleBackToList = () => {
     navigate('/artistIntroduction');

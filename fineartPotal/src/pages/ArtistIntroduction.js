@@ -12,7 +12,7 @@ import ranking2 from '../front_visual/ranking02.png';
 import ranking3 from '../front_visual/ranking03.png';
 
 const ArtistIntroduction = () => {
-  const { artists, setArtists, setTotalArtists } = useContext(ArtistContext);
+  const { setArtists, setTotalArtists, setArtistGroups, artistGroups } = useContext(ArtistContext);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
@@ -23,10 +23,47 @@ const ArtistIntroduction = () => {
   const fetchArtists = async () => {
     try {
       const response = await axios.get('/api/artists');
-      const data = response.data;
-      console.log(data);
-      setArtists(data.artists);
-      setTotalArtists(data.total);
+      const data = response.data.artists;
+
+      // 그룹별로 나눠서 artistGroups로 저장
+      const groups = {
+        "고전작가": [],
+        "역대작가": [],
+        "현대작가": [],
+        "수상작가": [],
+        "MZ작가": [],
+        "화제작가": [],
+        "스타작가": [],
+      };
+
+      const currentYear = new Date().getFullYear();
+
+      data.forEach(artist => {
+        // 고전 작가: 1950년 이전에 태어난 작가
+        if (artist.status === 'deceased' && artist.birth <= 1950) {
+          groups["고전작가"].push(artist);
+        } else if (artist.status === 'deceased' && artist.birth > 1950) {
+          groups["역대작가"].push(artist);
+        } else if (artist.status === 'alive') {
+          groups["현대작가"].push(artist);
+        }
+        if (artist.wins > 0) {
+          groups["수상작가"].push(artist);
+        }
+        if (currentYear - artist.birth >= 20 && currentYear - artist.birth <= 39) {
+          groups["MZ작가"].push(artist);
+        }
+        if (artist.score >= 1 && artist.score <= 100) {
+          groups["화제작가"].push(artist);
+        }
+        if (artist.star >= 1 && artist.star <= 100) {
+          groups["스타작가"].push(artist);
+        }
+      });
+
+      setArtists(data); // 전체 artist 목록 저장
+      setTotalArtists(data.length); // 전체 artist 수 저장
+      setArtistGroups(groups); // 그룹별 artist 목록 저장
     } catch (error) {
       console.error('작가 데이터를 불러오는 중 오류 발생:', error);
     }
@@ -36,76 +73,24 @@ const ArtistIntroduction = () => {
     setSearchQuery(event.target.value);
   };
 
-  // 작가 필터링
-  const filteredArtists = artists.filter((artist) =>
-    artist.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // 그룹별 필터링된 작가 목록
+  const filteredGroups = Object.keys(artistGroups).reduce((acc, group) => {
+    acc[group] = artistGroups[group].filter(artist =>
+      artist.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    return acc;
+  }, {});
 
-  // 각 그룹에 따른 작가 목록
-  const groups = {
-    "고전작가": [],
-    "역대작가": [],
-    "현대작가": [],
-    "수상작가": [],
-    "MZ작가":   [],
-    "화제작가": [],
-    "스타작가": [],
-  };
-
-  // 작가들을 그룹에 따라 분류
-  filteredArtists.forEach(artist => {
-
-    const currentYear = new Date().getFullYear();
-
-    // 고전 작가: 1950년 이전에 태어난 작가
-    if (artist.status === 'deceased' ) {
-      groups["고전작가"].push(artist);
-    }
-    // 역대 작가: 1950년 이후에 태어난 작가 중 사망한 작가
-    else if (artist.status === 'deceased' && artist.birth > 1950) {
-      groups["역대작가"].push(artist);
-    }
-    // 현대 작가: 살아있는 작가
-    else if (artist.status === 'alive') {
-      groups["현대작가"].push(artist);
-    }
-
-    
-    if (artist.wins > 0) {
-      groups["수상작가"].push(artist);
-    }
-
-    // MZ 작가: 현재 연도에서 20대와 30대 작가
-    if (currentYear - artist.birth >= 20 && currentYear - artist.birth <= 39) {
-      groups["MZ작가"].push(artist);
-    }
-
-    // 화제 작가: score가 있는 작가
-    if (artist.score >= 1 && artist.score <= 100) {
-      groups["화제작가"].push(artist);
-    }
-
-    // 스타 작가: star가 있는 작가
-    if (artist.star >= 1 && artist.star <= 100) {
-      groups["스타작가"].push(artist);
-    }
-  });
-
-  const goToArtistDetail = (artistId) => {
-    navigate(`/artist/${artistId}`);
-  };
-
+  // 각 그룹에서 최대 행 수 계산
   const maxRows = Math.max(
-    groups["고전작가"].length,
-    groups["역대작가"].length,
-    groups["현대작가"].length,
-    groups["수상작가"].length,
-    groups["MZ작가"].length,
-    groups["화제작가"].length,
-    groups["스타작가"].length
+    ...Object.values(filteredGroups).map((group) => group.length)
   );
 
   const maxRowsArray = Array.from({ length: maxRows });
+
+  const goToArtistDetail = (artistId, groupName) => {
+    navigate(`/artist/${artistId}`, { state: { group: groupName } });
+  };
 
   return (
     <div className="artist-page-container">
@@ -146,14 +131,14 @@ const ArtistIntroduction = () => {
                   <span>{index + 1}</span>
                 )}
               </div>
-              {Object.keys(groups).map((group) => (
+              {Object.keys(filteredGroups).map((group) => (
                 <div className="artist-table-cell" key={group}>
-                  {groups[group][index] ? (
+                  {filteredGroups[group][index] ? (
                     <button
                       className="artist-name-button"
-                      onClick={() => goToArtistDetail(groups[group][index].id)}
+                      onClick={() => goToArtistDetail(filteredGroups[group][index].id, group)}
                     >
-                      {groups[group][index].name}
+                      {filteredGroups[group][index].name}
                     </button>
                   ) : null}
                 </div>
