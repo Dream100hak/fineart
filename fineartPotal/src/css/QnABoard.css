@@ -1,0 +1,70 @@
+.qnaboard-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .qnaboard-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .post-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .post-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-item a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+  }
+  
+  .post-item a:hover {
+    text-decoration: underline;
+  }
+  
+  .post-date {
+    color: #888;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:hover {
+    background-color: #2980b9;
+  }
+  
+  .pagination .active {
+    background-color: #2980b9;
+    font-weight: bold;
+  }
+  

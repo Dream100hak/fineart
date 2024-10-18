@@ -1,0 +1,183 @@
+/* BasicBoard.css */
+/*기본 게시판 템플릿*/
+
+/* Google Fonts 적용 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+.basicboard-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-top: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.basicboard-container h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+/* 구분선 스타일 */
+.title-divider {
+  border: none;
+  border-top: 2px solid #2c3e50;
+  margin: 10px 0 20px 0;
+}
+
+/* 테이블 스타일 */
+.post-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: none; /* 테이블 테두리 제거 */
+}
+
+/* 헤더 행 아래에 구분선 추가 */
+.post-table thead tr {
+  border-bottom: 2px solid #dee2e6; /* 헤더 아래 구분선 */
+}
+
+.post-table th {
+  background-color: #ffffff;
+  font-weight: bold;
+  color: #495057;
+  text-align: center;
+  padding: 12px 10px;
+}
+
+/* 셀 스타일 */
+.post-table td {
+  padding: 15px 10px;
+  color: #343a40;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* 제목 셀 왼쪽 정렬 */
+.post-table td.title-cell {
+  text-align: left;
+  padding-left: 15px;
+}
+
+/* 행 아래에 구분선 추가 */
+.post-table tbody tr {
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* 마지막 행의 구분선 제거 */
+.post-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+/* 행 호버 효과 */
+.post-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.title-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* 글쓰기 버튼 스타일 */
+.write-post-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.write-post-button button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.write-post-button button:hover {
+  background-color: #218838;
+}
+
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.pagination button {
+  background-color: #ffffff;
+  color: #007bff;
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  margin: 0 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #e9ecef;
+}
+
+.pagination .active {
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .post-table th,
+  .post-table td {
+    font-size: 14px;
+    padding: 10px 5px;
+  }
+
+  .write-post-button button {
+    font-size: 14px;
+  }
+
+  .pagination button {
+    padding: 6px 10px;
+    margin: 0 2px;
+  }
+}
+
+/* 열 너비 조정 */
+.post-number {
+  width: 60px;
+}
+
+.post-title {
+  width: 50%;
+}
+
+.post-writer {
+  width: 120px;
+}
+
+.post-date {
+  width: 150px;
+}
+
+.post-views {
+  width: 60px;
+}

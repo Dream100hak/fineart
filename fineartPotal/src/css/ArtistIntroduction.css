@@ -1,0 +1,92 @@
+.artist-page-container {
+  display: flex;
+  flex-wrap: wrap; /* 화면 크기에 따라 자동으로 배치되도록 */
+}
+
+.artist-introduction {
+  flex: 1;
+  padding: 20px;
+  /* 오른쪽 마진 제거 */
+}
+
+@media screen and (max-width: 768px) {
+  .artist-page-container {
+    flex-direction: column;
+  }
+
+  .artist-introduction {
+    margin-right: 0;
+  }
+}
+.search-bar-container {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.search-bar {
+  padding: 8px;
+  width: 300px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+.artist-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.artist-table-row {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr); /* 8개의 동일한 컬럼 */
+}
+
+.artist-table-header {
+  font-weight: bold;
+  background-color: #f0f0f0;
+}
+
+.artist-table-cell {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.ranking-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ranking-image {
+  width: 150px; /* 필요에 따라 크기 조절 */
+  height: auto;
+}
+
+.artist-name-button {
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.artist-name-button:hover {
+  background-color: #ffcccb;
+  transform: translateY(-3px);
+}
+
+.artist-name-button:active {
+  transform: translateY(0);
+}
+
+.artist-name-button:focus {
+  outline: none;
+  border-color: #ff6347;
+}

@@ -1,0 +1,147 @@
+/* 전체 컨테이너 스타일 */
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* 헤더 스타일 */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1f1f1f;
+    color: white;
+    padding: 15px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+/* 네비게이션 스타일 */
+.admin-nav a {
+    margin: 0 20px;
+    color: #f0f0f0;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.admin-nav a:hover {
+    color: #ffffff;
+}
+
+/* 현재 활성화된 네비게이션 항목 강조 스타일 - 수정된 부분 */
+.admin-nav a.active {
+    color: #ffffff;
+
+}
+
+/* 사용자 정보 스타일 */
+.admin-user-info {
+    display: flex;
+    align-items: center;
+}
+
+.logout-btn {
+    margin-left: 15px;
+    padding: 8px 15px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #d62828;
+}
+
+/* 본문 스타일 */
+.admin-body {
+    display: flex;
+    flex: 1;
+}
+
+/* 사이드바 스타일 */
+.admin-sidebar {
+    width: 220px;
+    background-color: #2e2e2e;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.admin-sidebar a {
+    margin-bottom: 15px;
+    color: #f0f0f0;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.admin-sidebar a:hover {
+    background-color: #444;
+    transform: translateX(5px);
+}
+
+/* 현재 활성화된 사이드바 항목 강조 스타일 - 수정된 부분 */
+.admin-sidebar a.active {
+    background-color: #6c757d; /* 강조 색상 (회색) */
+    color: #fff;
+    font-weight: bold;
+}
+
+/* 메인 콘텐츠 스타일 */
+.admin-main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+/* 푸터 스타일 */
+.admin-footer {
+    background-color: #1f1f1f;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 상단 메뉴 버튼 스타일 - 수정된 부분 */
+.top-menu-button {
+    color: #f0f0f0;
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+}
+
+.top-menu-button:hover {
+    background-color: #444;
+}
+
+/* 현재 활성화된 상단 메뉴 버튼 강조 스타일 - 수정된 부분 */
+.top-menu-button.active {
+    background-color: #6c757d; /* 강조 색상 (회색) */
+    color: #fff;
+    border-radius: 5px;
+}

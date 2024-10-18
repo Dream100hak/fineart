@@ -1,0 +1,140 @@
+/* HomePage 레이아웃 */
+.home-layout {
+    display: flex;
+
+  }
+  
+  /* 사이드바 스타일 */
+  .sidebar {
+    width: 200px;
+    background-color: #333;
+    padding: 20px;
+    color: white;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    margin-bottom: 15px;
+  }
+  
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .sidebar ul li a:hover {
+    color: #ddd;
+  }
+  
+  /* 메인 콘텐츠 스타일 */
+  .content {
+    flex: 1;
+    padding: 20px;
+    color: white;
+  }
+  
+  /* 카드 컨테이너 스타일 */
+  .card-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center; /* 카드들이 화면 중앙에 위치하도록 */
+    flex-wrap: wrap; /* 카드가 화면을 넘치면 다음 줄로 넘어가도록 */
+  }
+  
+  /* 카드 스타일 */
+  .card {
+    width: 300px; /* 카드 너비 고정 */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px); /* 카드가 Y축으로 살짝 올라가는 효과 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* 호버 시 그림자 추가 */
+  }
+  
+  .card-image {
+    width: 100%;
+    height: 200px; /* 이미지 높이 고정 */
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 이미지 크기 맞춤 */
+  }
+  
+  /* 하늘색 오버레이 */
+  .card-image::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(135, 206, 250, 0.5); /* 하늘색 반투명 오버레이 */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .card:hover .card-image::after {
+    opacity: 1; /* 호버 시 오버레이 보이게 설정 */
+  }
+  
+  .card-text {
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .card-text h2 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: black;
+  }
+  
+  .card-text p {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 5px;
+  }
+  
+  /* h1 스타일 */
+  .content h1 {
+    color: black; /* h1 텍스트 색상 */
+    margin-bottom: 30px; /* 여백 추가 */
+    text-align: center;
+    position: relative;
+    font-size: 2rem;
+    font-weight: bold;
+  }
+  
+  /* h1 밑줄 효과 */
+  .content h1::after {
+    content: "";
+    position: absolute;
+    width: 50%; /* 밑줄 너비 */
+    height: 1px;
+    background-color: #3498db; /* 파란색 밑줄 */
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+    margin-bottom: -10px;
+  }
+  
+  .content h1:hover::after {
+    width: 100%; /* 호버 시 밑줄 전체로 확장 */
+  }
+  

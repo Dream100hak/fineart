@@ -1,0 +1,180 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* 홈페이지 이름 스타일 */
+#homePageSubTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff; /* 기본 링크 색상 */
+  text-decoration: none; /* 밑줄 제거 */
+  margin-right: left;
+}
+
+/* 링크가 방문된 후에도 동일하게 보이도록 설정 */
+#homePageSubTitle:visited {
+  color: #ffffff; /* 방문 후에도 같은 색 */
+  text-decoration: none; /* 방문 후에도 밑줄 제거 */
+}
+
+/* 링크에 마우스를 올렸을 때 색상 변경 */
+#homePageSubTitle:hover {
+  color: #95bce7; /* 마우스 오버 시 색상 */
+}
+
+
+
+/* 전체 레이아웃 */
+.section.gnb_sec {
+  background-color: #fff;
+}
+
+.inside {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 네비게이션 */
+#gnbWrapper {
+  display: flex;
+  align-items: center;
+}
+
+#gnb {
+  list-style: none;
+  display: flex;
+}
+
+#gnb > li {
+  position: relative;
+  margin-right: 20px;
+}
+
+#gnb > li > a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+#gnb > li > a:hover {
+  color: #95bce7;
+}
+
+/* 로그인 / 회원가입을 오른쪽 끝에 고정 */
+.auth-links {
+  display: flex;
+  gap: 10px;
+  margin-left: auto; /* 자동으로 오른쪽 끝에 배치 */
+}
+
+.auth-links li {
+  list-style: none;
+  color: #ffffff;
+}
+
+.auth-links a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  color: #cccccc;
+}
+
+/* 배너 스타일 */
+.banner {
+  background-image: url('../front_visual/slide01_bg.png');
+  background-size: cover;
+  background-position: center;
+  height: 1024px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  position: relative;
+  z-index: 1000; /* 배너를 최상위로 고정 */
+}
+
+.banner-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 배너 텍스트 중앙 배치 */
+.banner h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.banner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명한 오버레이 */
+  z-index: -1;
+}
+
+/* 네비게이션 바 상단에 고정 */
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: transparent;
+  padding: 20px 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Footer */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+
+/* 로그아웃 버튼 스타일 */
+.logout-btn {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff4b4b;  /* 마우스 오버 시 더 진한 색상 */
+  transform: translateY(-2px);  /* 살짝 올라가는 효과 */
+}
+
+.logout-btn:active {
+  background-color: #e63e3e;  /* 클릭 시 더 진한 색상 */
+  transform: translateY(0);  /* 클릭 시 내려가는 효과 */
+}
+
+.auth-links li {
+  list-style: none;
+}

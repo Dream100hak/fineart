@@ -1,0 +1,577 @@
+/* ArtistRegistration.css */
+
+.artist-registration-container {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  margin: 40px auto;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+
+.artist-registration-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.artist-registration-header h2 {
+  font-size: 2.2em;
+  color: #333;
+  font-weight: bold;
+}
+
+.form-row {
+  display: flex;
+  align-items: flex-start; 
+  margin: 10px;
+  width: 100%;  
+}
+
+.form-row label {
+  flex: 0 0 120px; 
+  font-weight: bold;
+  font-size: 1em;
+  color: #555;
+}
+
+.form-row input, .form-row textarea {
+  flex: 1;
+  padding: 12px; 
+  border-radius: 8px; 
+  border: 1px solid #ccc;
+  font-size: 1em;
+  width: calc(100% - 130px);  
+  box-sizing: border-box;  
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: none; /* 사용자가 수동으로 크기를 조정하지 못하도록 */
+  overflow: hidden; /* 자동 조정될 때 스크롤바를 감추기 위해 */
+  box-sizing: border-box; /* padding 포함한 width를 정확히 계산 */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 15px 0;
+}
+
+.add-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.add-btn:hover {
+  background-color: #0056b3;
+}
+
+.education-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.education-item {
+  background-color: #f1f1f1;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+.artwork-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+  align-items: center;
+  justify-items: center;
+}
+
+.artwork-item {
+  position: relative; /* 삭제 버튼을 절대 위치로 배치하기 위해 상대 위치 지정 */
+  max-width: 250px;
+  width: 100%;
+  text-align: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: transform 0.3s;
+  overflow: hidden; /* 이미지가 버튼을 넘어서지 않도록 설정 */
+}
+
+.artwork-item:hover {
+  transform: translateY(-5px);
+}
+
+.artwork-image {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.artwork-details {
+  text-align: center;
+}
+
+.delete-btn.top-right {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4d4d;
+  color: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 10; /* 이미지보다 버튼이 우선하도록 높은 z-index 설정 */
+}
+
+.delete-btn.top-right:hover {
+  background-color: #e60000;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.large-modal.adjusted-modal {
+  background: #fff;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  max-width: 800px;
+  width: 80%;
+  max-height: 85vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.category-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.category-btn {
+  padding: 10px 15px;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+  background: transparent;
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.category-btn.selected {
+  background: #007bff;
+  color: #fff;
+}
+
+.category-btn:hover {
+  background: #0056b3;
+  color: #fff;
+}
+
+.artwork-info {
+  width: 100%;
+  margin: 0 auto; 
+  padding: 20px; 
+  box-sizing: border-box;
+}
+.modal h3 {
+  margin-bottom: 20px;
+  color: #444;
+  font-size: 1.8em;
+  text-align: center;
+  font-weight: bold;
+  display: none; /* 이미지 등록 시 제목 숨김 */
+}
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.modal-btn {
+  padding: 12px 25px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.modal-btn:hover {
+  background-color: #0056b3;
+}
+
+.cancel-btn {
+  background-color: #ff4d4d;
+}
+
+.cancel-btn:hover {
+  background-color: #e60000;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 1em;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer; /* 레이블 클릭 가능하도록 설정 */
+  margin: 0; /* 여백을 없애 체크박스와 텍스트가 가까워지도록 설정 */
+}
+
+.artwork-upload-container {
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.upload-label {
+  display: inline-block;
+  width: calc(100% - 40px); /* 오른쪽에 버튼 공간을 남기기 위해 너비 조정 */
+  height: 200px;
+  background-color: #f1f1f1;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: relative;
+  margin-bottom: 20px;
+}
+.upload-label:hover {
+  background-color: #e9ecef;
+}
+
+.upload-placeholder {
+  text-align: center;
+  color: #888;
+  width: 100%;
+  height: 200px;
+  background-color: #f1f1f1;
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.upload-placeholder:hover {
+  background-color: #e9ecef;
+}
+.artwork-preview-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* 이미지와 버튼 사이의 간격 */
+  width: 100%;
+}
+.artwork-preview-container {
+  flex: 1; /* 이미지가 가능한 한 넓게 차지하도록 설정 */
+  height: 200px;
+  overflow: hidden;
+  border-radius: 6px;
+  background-color: #f1f1f1;
+}
+
+.artwork-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+  /* transform: rotate(var(--rotation-angle, 0deg)); 이 부분 제거 */
+  transition: transform 0.3s; /* 회전 애니메이션 추가 */
+}
+.canvas-selection {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.canvas-type-container {
+  display: flex;
+  align-items: center;
+}
+
+.category-btn {
+  margin-right: 5px; /* 버튼 사이의 간격 조정 */
+}
+
+.divider {
+  margin: 0 10px;
+  color: #999; /* 구분선 색상 */
+}
+
+.canvas-size-select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+.image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  position: relative;
+}
+
+.overlay-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+.close-overlay-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #f06, #f90); /* 그라데이션 배경 추가 */
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  border-radius: 12px; /* 더 부드러운 곡선 */
+  font-size: 1.1em;
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* 더 깊은 그림자 효과 */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.close-overlay-btn:hover {
+  transform: translateY(-3px); /* 버튼이 위로 살짝 올라가는 효과 */
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.4); /* 호버 시 그림자 강도 증가 */
+}
+
+.image-buttons {
+  position: absolute;
+  top: 10px;  /* 이미지 상단에 위치 */
+  right: 10px; /* 이미지 오른쪽에 위치 */
+  display: flex;
+  gap: 10px; /* 버튼들 간의 간격 */
+  z-index: 10; /* 이미지 위에 버튼이 보이도록 설정 */
+}
+.image-buttons-container {
+  display: flex;
+  flex-direction: column; /* 버튼들이 수직으로 나열되도록 설정 */
+  gap: 10px; /* 버튼들 간의 간격 */
+}
+
+.zoom-btn, .image-delete-btn {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.zoom-btn:hover, .image-delete-btn:hover {
+  background-color: #e9ecef; /* 버튼 호버 시 색상 변경 */
+}
+
+.image-delete-btn {
+  background-color: #ff4d4d; /* 제거 버튼의 기본 색상 */
+  color: #fff;
+}
+
+.image-delete-btn:hover {
+  background-color: #e60000; /* 제거 버튼 호버 시 색상 */
+}
+
+.overlay-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.rotate-overlay-btn, .close-overlay-btn {
+  background-color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.rotate-overlay-btn:hover, .close-overlay-btn:hover {
+  background-color: #f1f1f1;
+}
+
+
+.radio-container {
+  display: flex;
+  gap: 1px;
+  align-items: center;
+}
+
+.radio-label {
+  font-size: 1em;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  align-items: left;
+}
+
+.radio-label input {
+  margin-right: 8px;
+}
+
+/* 작품 목록 컨테이너 */
+.artwork-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* 각 작품 아이템 */
+.artwork-item {
+  position: relative;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.artwork-item:hover {
+  transform: translateY(-5px);
+}
+
+/* 작품 이미지 */
+.artwork-image {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* 작품 정보 */
+.artwork-info {
+  text-align: center;
+}
+
+/* 수정 및 삭제 버튼 */
+.edit-artwork-btn,
+.delete-artwork-btn {
+  padding: 8px 12px;
+  margin: 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.edit-artwork-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.edit-artwork-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-artwork-btn {
+  background-color: #ff4d4d;
+  color: #fff;
+}
+
+.delete-artwork-btn:hover {
+  background-color: #e60000;
+}
+
+/* 이미지 없음 텍스트 스타일 */
+.no-image {
+  width: 100%;
+  height: 150px;
+  background-color: #e9ecef;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  margin-bottom: 10px;
+}

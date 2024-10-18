@@ -1,0 +1,254 @@
+/* 갤러리 컨테이너 */
+.gallery-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* 활성화된 필터 표시 */
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 15px 0;
+  gap: 8px;
+  border-top: 1px solid #e0e0e0; /* 경계선 추가 */
+  padding-top: 10px;
+}
+
+/* 필터 태그 */
+.filter-tag {
+  display: flex;
+  align-items: center;
+  background-color: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #90caf9;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* 필터 태그의 닫기 버튼 */
+.filter-tag button {
+  background: none;
+  border: none;
+  margin-left: 5px;
+  color: #0d47a1;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* 필터 태그 닫기 버튼 호버 효과 */
+.filter-tag button:hover {
+  color: #084298;
+}
+
+/* 전체 필터 삭제 버튼 */
+.clear-filters {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.3s ease;
+}
+
+.clear-filters:hover {
+  background-color: #c82333;
+}
+
+/* 필터 컨테이너 */
+.filters-container {
+  display: flex;
+  flex-direction: column; /* 필터 그룹을 세로로 배치 */
+  gap: 15px; /* 필터 그룹 간 간격 조정 */
+  margin-bottom: 25px;
+  border-bottom: 1px solid #e0e0e0; /* 경계선 추가 */
+  padding-bottom: 15px;
+}
+
+/* 필터 그룹 */
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 0; /* 필터 그룹 내부 패딩 */
+  border-bottom: 1px solid #e0e0e0; /* 각 필터 그룹 하단에 경계선 추가 */
+}
+
+.filter-group:last-child {
+  border-bottom: none; /* 마지막 필터 그룹에는 경계선 제거 */
+}
+
+/* 필터 제목 */
+.filter-group h2 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  white-space: nowrap;
+  min-width: 80px; /* 제목의 최소 너비 설정 */
+}
+
+/* 필터 버튼 컨테이너 */
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* 버튼 간 간격 조정 */
+}
+
+/* 필터 버튼 */
+.filter-group .filter-buttons button {
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #007bff;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 필터 버튼 호버 효과 */
+.filter-group .filter-buttons button:hover {
+  background-color: #007bff;
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* 활성화된 필터 버튼 */
+.filter-group .filter-buttons button.active {
+  background-color: #007bff;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+/* 활성화된 필터 버튼 호버 효과 */
+.filter-group .filter-buttons button.active:hover {
+  background-color: #0056b3;
+}
+
+/* 갤러리 그리드 */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
+}
+
+/* 갤러리 아이템 */
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #fff;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-item .overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 15px;
+  text-align: left;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .overlay {
+  opacity: 1;
+}
+
+.overlay h2 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+}
+
+.overlay p {
+  margin: 2px 0;
+  font-size: 13px;
+}
+
+/* 로딩 상태 */
+.gallery-container p {
+  font-size: 16px;
+  color: #afafaf;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .filters-container {
+    gap: 10px; /* 필터 그룹 간 간격 축소 */
+    padding-bottom: 10px;
+  }
+
+  .filter-group {
+    flex-direction: column; /* 모바일에서 필터 그룹을 세로로 배치 */
+    align-items: flex-start;
+    border-bottom: 1px solid #e0e0e0; /* 필터 그룹 간 경계선 유지 */
+    padding: 8px 0; /* 필터 그룹 내부 패딩 축소 */
+  }
+
+  .filter-group:last-child {
+    border-bottom: none; /* 마지막 필터 그룹에는 경계선 제거 */
+  }
+
+  .filter-group h2 {
+    font-size: 14px;
+    min-width: unset; /* 최소 너비 해제 */
+  }
+
+  .filter-group .filter-buttons button {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .filter-tag {
+    font-size: 12px;
+  }
+
+  .clear-filters {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .gallery-item img {
+    height: 180px;
+  }
+
+  .overlay h2 {
+    font-size: 14px;
+  }
+
+  .overlay p {
+    font-size: 12px;
+  }
+}
