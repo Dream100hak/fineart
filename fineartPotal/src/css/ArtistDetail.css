@@ -21,16 +21,6 @@
   margin-bottom: 40px;
   text-align: left;
 }
-
-.artist-profile img {
-  width: 250px;
-  height: 250px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 30px; /* 이미지와 설명 사이 간격 */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* 그림자 추가 */
-}
-
 .artist-info {
   max-width: 600px;
 }

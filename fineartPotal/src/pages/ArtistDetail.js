@@ -36,6 +36,8 @@ const ArtistDetail = () => {
       const response = await axios.get(`/api/artists/${id}`);
       setArtist(response.data);
       setArtworks(response.data.artworks);
+      console.log(response.data.artworks);
+
     } catch (error) {
       console.error('작가 정보를 불러오는 중 오류가 발생했습니다:', error);
     }
@@ -98,7 +100,6 @@ const ArtistDetail = () => {
 
       <h1 className="artist-title">{artist.name}</h1>
       <div className="artist-profile">
-        <img src={`${process.env.REACT_APP_API_URL}${artist.image_url}`} alt={artist.name} />
         <div className="artist-info">
           <p>{artist.description}</p>
         </div>
@@ -145,12 +146,12 @@ const ArtistDetail = () => {
             >
               <img
                 src={`${process.env.REACT_APP_API_URL}${artwork.image_url}`}
-                alt={artwork.title}
+                alt={artwork.name}
                 className="artwork-image"
               />
               <p>{
                 `${artwork.canvas_type ? artwork.canvas_type : 'Unknown type'}형 ${artwork.canvas_size ? artwork.canvas_size : 'Unknown size'}호 (${artwork.canvas_type && artwork.canvas_size && canvasSizes[artwork.canvas_type]?.[artwork.canvas_size] ? canvasSizes[artwork.canvas_type][artwork.canvas_size] : 'Unknown size'
-                }) - ${artwork.title}`
+                })cm - ${artwork.name}`
               }</p>
             </div>
           ))}

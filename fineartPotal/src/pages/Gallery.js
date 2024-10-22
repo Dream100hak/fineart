@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Gallery.css';
 import axios from 'axios';
+import { getCanvasSizes } from 'Common';
 
 function Gallery() {
   const [artworks, setArtworks] = useState([]);
@@ -15,25 +16,44 @@ function Gallery() {
   });
 
   const [activeFilters, setActiveFilters] = useState({});
+  const [canvasSizes, setCanvasSizes] = useState({});
+  const [artists, setArtists] = useState({});
 
   useEffect(() => {
+
+    const fetchCanvasSizes = async () => {
+      const sizes = await getCanvasSizes();
+      setCanvasSizes(sizes);
+    };
+
     const fetchArtworks = async () => {
       let query = `/api/artworks/?`;
       for (const key in filters) {
         if (filters[key] && filters[key] !== '') query += `${key}=${filters[key]}&`;
       }
-      
+
       try {
         const response = await axios.get(query);
         if (response.status !== 200) throw new Error('작품을 불러오지 못했습니다.');
         const data = response.data;
         setArtworks(data);
+
+        const artistIds = [...new Set(data.map(artwork => artwork.artist_id))];
+        const artistResponses = await Promise.all(artistIds.map(id => axios.get(`/api/artists/${id}`)));
+        const artistsData = artistResponses.reduce((acc, res) => {
+          acc[res.data.id] = res.data;
+          return acc;
+        }, {});
+        setArtists(artistsData);
+
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
     };
+
+    fetchCanvasSizes();
     fetchArtworks();
   }, [filters]);
 
@@ -199,9 +219,9 @@ function Gallery() {
               <img src={`${process.env.REACT_APP_API_URL}${artwork.image_url}`} alt={artwork.title} />
               <div className="overlay">
                 <h2>{artwork.name}</h2>
-                <p>{artwork.artist}</p>
+                <p>{artists[artwork.artist_id]?.name || 'Unknown Artist'}</p>
                 <p>{artwork.category}</p>
-                <p>{artwork.canvas_type}{artwork.canvas_size}</p>
+                <p>{artwork.canvas_type}형 {artwork.canvas_size}호 ({canvasSizes[artwork.canvas_type]?.[artwork.canvas_size]}cm)</p>
                 <p>렌탈 가능 여부: {artwork.is_rentable ? '가능' : '불가능'}</p>
               </div>
             </div>
