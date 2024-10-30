@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ArtistDetails.css';
 import ArtistRegistration from './ArtistRegistration';
+import { getCanvasSizes } from 'Common'; // 캔버스 사이즈 데이터를 가져오기 위해 추가
 
 const ArtistDetails = ({ artistId, onBack, onArtistUpdate, onArtistDelete }) => {
   const [artistDetails, setArtistDetails] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [canvasSizes, setCanvasSizes] = useState({ F: {}, P: {}, M: {} });
 
   useEffect(() => {
     const fetchArtistDetails = async () => {
@@ -19,6 +21,15 @@ const ArtistDetails = ({ artistId, onBack, onArtistUpdate, onArtistDelete }) => 
 
     fetchArtistDetails();
   }, [artistId]);
+
+  useEffect(() => {
+    const fetchCanvasSizes = async () => {
+      const sizes = await getCanvasSizes();
+      setCanvasSizes(sizes);
+    };
+
+    fetchCanvasSizes();
+  }, []);
 
   // 수정 모달 열기
   const handleEditArtist = () => {
@@ -109,7 +120,11 @@ const ArtistDetails = ({ artistId, onBack, onArtistUpdate, onArtistDelete }) => 
               <p>가격: {artwork.price ? `₩${artwork.price.toLocaleString()}` : '미판매'}</p>
               <p>
                 사이즈: {artwork.canvas_type}
-                {artwork.canvas_size}호
+                {artwork.canvas_size}호 (
+                {canvasSizes[artwork.canvas_type] &&
+                  canvasSizes[artwork.canvas_type][artwork.canvas_size]
+                  ? `${canvasSizes[artwork.canvas_type][artwork.canvas_size]} cm`
+                  : '크기 정보 없음'})
               </p>
               <p>렌탈 가능 여부: {artwork.is_rentable ? '가능' : '불가능'}</p>
             </div>

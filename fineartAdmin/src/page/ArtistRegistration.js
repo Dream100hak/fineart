@@ -7,13 +7,13 @@ import { getCanvasSizes } from 'Common';
 import ArtworkModal from './ArtworkModal';
 
 const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
-  
+
   const navigate = useNavigate(); // 페이지 이동을 위한 훅
   const isEditMode = !!artist;
 
   const [artistName, setArtistName] = useState('');
   const [artistDescription, setArtistDescription] = useState('');
-  const [artistBirth, setArtistBirth] = useState(null);
+  const [artistBirth, setArtistBirth] = useState(2024);
   const [artistScore, setArtistScore] = useState(0);
   const [artistStar, setArtistStar] = useState(0);
   const [artistWins, setArtistWins] = useState(0);
@@ -35,9 +35,9 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
       setArtistWins(artist.wins || 0);
       setArtistStatus(artist.status || 'alive');
       setArtistNationality(artist.nationality || '대한민국');
-  
+
       const fetchedArtworks = artist.artworks || [];
-  
+
       const processedArtworks = fetchedArtworks.map((artwork) => ({
         id: artwork.id,
         name: artwork.name,
@@ -51,7 +51,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
         canvasSize: artwork.canvas_size,
         rotationAngle: artwork.rotation_angle || 0,
       }));
-  
+
       setArtworks(processedArtworks);
     }
   }, [isEditMode, artist]);
@@ -155,7 +155,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
   };
 
   const handleSubmit = async () => {
- 
+
 
     const artistData = {
       name: artistName,
@@ -268,7 +268,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
       }
 
       navigate('/artist-management');
-      
+
     } catch (error) {
       alert('작가 정보 저장 중 오류가 발생했습니다.');
       console.error('Error:', error);
@@ -304,12 +304,20 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
 
         <div className="form-row">
           <label>출생 연도:</label>
-          <input
-            type="number"
-            value={artistBirth || ''}
-            placeholder="출생 연도 입력"
+          <select
+            className="birth-year-select"
+            value={artistBirth || 2024}
             onChange={(e) => setArtistBirth(e.target.value)}
-          />
+          >
+            {Array.from({ length: 150 }, (_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              );
+            })}
+          </select>
         </div>
 
         <hr className="divider" />
@@ -322,12 +330,13 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
         <div className="form-row">
           <label>평가 (0-100):</label>
           <input
-            type="number"
-            value={artistScore}
+            type="range"
             min="0"
             max="100"
+            value={artistScore}
             onChange={(e) => setArtistScore(e.target.value)}
           />
+          <span className="range-value">{artistScore}</span>
         </div>
 
         <hr className="divider" />
@@ -335,12 +344,13 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
         <div className="form-row">
           <label>스타성 (0-100):</label>
           <input
-            type="number"
-            value={artistStar}
+            type="range"
             min="0"
             max="100"
+            value={artistStar}
             onChange={(e) => setArtistStar(e.target.value)}
           />
+          <span className="range-value">{artistStar}</span>
         </div>
 
         <hr className="divider" />
