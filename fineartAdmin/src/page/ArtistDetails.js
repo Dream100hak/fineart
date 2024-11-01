@@ -12,7 +12,7 @@ const ArtistDetails = ({ artistId, onBack, onArtistUpdate, onArtistDelete }) => 
   useEffect(() => {
     const fetchArtistDetails = async () => {
       try {
-        const artistResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/artists/${artistId}`);
+        const artistResponse = await axios.get(`/api/artists/${artistId}`);
         setArtistDetails(artistResponse.data);
       } catch (error) {
         console.error('작가 상세 정보를 가져오는 중 오류 발생:', error);
@@ -46,7 +46,7 @@ const ArtistDetails = ({ artistId, onBack, onArtistUpdate, onArtistDelete }) => 
     const confirmDelete = window.confirm('정말로 이 작가를 삭제하시겠습니까?');
     if (confirmDelete) {
       try {
-        await axios.delete(`${process.env.REACT_APP_API_URL}/api/artists/${artistId}`);
+        await axios.delete(`/api/artists/${artistId}`);
         alert('작가가 삭제되었습니다.');
         // 상위 컴포넌트에 삭제된 작가 ID 전달
         if (onArtistDelete) {
@@ -108,7 +108,7 @@ const ArtistDetails = ({ artistId, onBack, onArtistUpdate, onArtistDelete }) => 
             <div key={artwork.id} className="artwork-card">
               {artwork.image_url ? (
                 <img
-                  src={`${process.env.REACT_APP_API_URL}${artwork.image_url}`}
+                  src={`${artwork.image_url}`}
                   alt={artwork.name}
                   className="artwork-image"
                 />

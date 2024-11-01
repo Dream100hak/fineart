@@ -103,7 +103,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
       formData.append('image', rotatedBlob, 'rotated_image.jpg');
 
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/artworks/upload`,
+        `/api/artworks/upload`,
         formData,
         {
           headers: {
@@ -198,7 +198,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
         }
         // 작가 정보 업데이트 요청
         const updatedArtistResponse = await axios.put(
-          `${process.env.REACT_APP_API_URL}/api/artists/${artist.id}`,
+          `/api/artists/${artist.id}`,
           artistData
         );
         const updatedArtistData = updatedArtistResponse.data;
@@ -223,7 +223,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
           }
         }
         // 새로운 작가 등록 요청
-        const artistResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/artists`, {
+        const artistResponse = await axios.post(`/api/artists`, {
           name: artistData.name,
           description: artistData.description,
           birth: artistData.birth,
@@ -252,7 +252,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
               rotation_angle: artwork.rotation_angle || 0,
             };
 
-            await axios.post(`${process.env.REACT_APP_API_URL}/api/artworks`, newArtwork);
+            await axios.post(`/api/artworks`, newArtwork);
           } catch (artworkError) {
             alert('작품 등록 중 오류가 발생했습니다.');
             console.error('작품 등록 실패:', artworkError);
@@ -410,7 +410,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
                       typeof artwork.image === 'string'
                         ? artwork.image.startsWith('http')
                           ? artwork.image
-                          : `${process.env.REACT_APP_API_URL}${artwork.image}`
+                          : `${artwork.image}`
                         : URL.createObjectURL(artwork.image)
                     }
                     alt="작품 이미지"

@@ -73,7 +73,7 @@ const ArtworkModal = ({ canvasSizes, newArtwork, onSave, onClose, editingIndex }
 
     const handleImageOverlay = (image) => {
         if (typeof image === 'string') {
-            setOverlayImageSrc(image.startsWith('http') ? image : `${process.env.REACT_APP_API_URL}${image}`);
+            setOverlayImageSrc(image.startsWith('http') ? image : `${image}`);
         } else {
             setOverlayImageSrc(URL.createObjectURL(image));
         }
@@ -125,7 +125,7 @@ const ArtworkModal = ({ canvasSizes, newArtwork, onSave, onClose, editingIndex }
                                         typeof artworkData.image === 'string'
                                             ? artworkData.image.startsWith('http')
                                                 ? artworkData.image
-                                                : `${process.env.REACT_APP_API_URL}${artworkData.image}`
+                                                : `${artworkData.image}`
                                             : URL.createObjectURL(artworkData.image)
                                     }
                                     alt="Preview"

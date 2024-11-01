@@ -12,7 +12,7 @@ const ArtistList = () => {
   // 작가 목록 가져오기 함수
   const fetchArtists = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/artists`);
+      const response = await axios.get(`/api/artists`);
       const sortedArtists = response.data.artists.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       setArtists(sortedArtists);
       setFilteredArtists(sortedArtists);
@@ -85,7 +85,7 @@ const ArtistList = () => {
               >
                 {artist.representative_image ? (
                   <img
-                    src={`${process.env.REACT_APP_API_URL}${artist.representative_image}`}
+                    src={`${artist.representative_image}`}
                     alt={`${artist.name} 대표 이미지`}
                     className="artist-representative-image"
                   />

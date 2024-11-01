@@ -216,7 +216,7 @@ function Gallery() {
         <div className="gallery-grid">
           {artworks.map((artwork) => (
             <div key={artwork.id} className="gallery-item">
-              <img src={`${process.env.REACT_APP_API_URL}${artwork.image_url}`} alt={artwork.title} />
+              <img src={`${artwork.image_url}`} alt={artwork.title} />
               <div className="overlay">
                 <h2>{artwork.name}</h2>
                 <p>{artists[artwork.artist_id]?.name || 'Unknown Artist'}</p>

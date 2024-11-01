@@ -112,7 +112,7 @@ const ArtistDetail = () => {
               &times;
             </button>
             <img
-              src={`${process.env.REACT_APP_API_URL}${artworks[selectedArtworkIndex].image_url}`}
+              src={`${artworks[selectedArtworkIndex].image_url}`}
               alt={artworks[selectedArtworkIndex].title}
               className="modal-image"
             />

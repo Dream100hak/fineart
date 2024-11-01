@@ -4,7 +4,7 @@ export const getCanvasSizes = async () => {
 
   try {
     // Common 폴더의 텍스트 파일 읽기
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/canvas-sizes`);
+    const response = await fetch(`/api/canvas-sizes`);
 
     const data = await response.text();
 
