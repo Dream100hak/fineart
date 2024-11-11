@@ -8,9 +8,9 @@ const {
   uploadImage,
   uploadVideo,
   uploadThumbnail,
+  updateArticle,  // 추가된 업데이트 함수
 } = require('../controllers/boardController'); // 공통 컨트롤러 사용
 const { imageUpload, videoUpload } = require('../config/multerConfig');
-
 
 const router = express.Router();
 
@@ -30,7 +30,6 @@ router.post('/:boardType/upload/image', imageUpload.single('image'), uploadImage
 // 동영상 업로드 라우트
 router.post('/:boardType/upload/video', dynamicRoute, videoUpload.single('video'), uploadVideo);
 
-
 // 썸네일 업로드 라우트 (이미지 업로드로 처리)
 router.post('/:boardType/upload/thumbnail', imageUpload.single('thumbnail'), uploadThumbnail);
 
@@ -43,9 +42,10 @@ router.get('/:boardType/articles/:id', dynamicRoute, getArticleById);
 // 조회수 증가 라우트
 router.put('/:boardType/articles/:id/views', dynamicRoute, incrementArticleViews);
 
+// 게시글 수정 라우트
+router.put('/:boardType/articles/:id', dynamicRoute, updateArticle);
+
 // 게시글 삭제 라우트
 router.delete('/:boardType/articles/:id', dynamicRoute, deleteArticle);
 
 module.exports = router;
-
-

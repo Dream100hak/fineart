@@ -1,0 +1,80 @@
+/* BoardDetails.css */
+
+.board-details-container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.article-content {
+  text-align: left;
+}
+
+.article-content h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.article-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.actions {
+  margin-top: 20px;
+}
+
+.actions button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.actions button:hover {
+  background-color: #0056b3;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form input[type="text"],
+.edit-form textarea {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.edit-form button {
+  margin-right: 10px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #28a745;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-form button:hover {
+  background-color: #218838;
+}
+
+.edit-form button:last-of-type {
+  background-color: #dc3545;
+}
+
+.edit-form button:last-of-type:hover {
+  background-color: #c82333;
+}

@@ -2,6 +2,8 @@ import React from 'react';
 import './page/AdminPage.css';
 import ArtistRegistration from './page/ArtistRegistration';
 import ArtistList from './page/ArtistList';
+import BoardList from './page/BoardList';
+import BoardDetails from './page/BoardDetails';
 import { BrowserRouter as Router, Route, Routes, useLocation, Link } from 'react-router-dom';
 
 // Sidebar 컴포넌트 추가
@@ -32,13 +34,13 @@ const Sidebar = () => {
       )}
       {location.pathname.includes('/board') && (
         <>
-          <Link to="/board-management" className={location.pathname === '/board-management' ? 'active' : ''}>
+          <Link to="/board/free_board" className={location.pathname === '/board/free_board' ? 'active' : ''}>
             자유 게시판
           </Link>
-          <Link to="#" className={location.pathname === '/board-questions' ? 'active' : ''}>
+          <Link to="/board/qna_board" className={location.pathname === '/board/qna_board' ? 'active' : ''}>
             질문 게시판
           </Link>
-          <Link to="#" className={location.pathname === '/board-jobs' ? 'active' : ''}>
+          <Link to="/board/job_board" className={location.pathname === '/board/job_board' ? 'active' : ''}>
             구인 구직
           </Link>
         </>
@@ -72,8 +74,9 @@ const App = () => {
               <Route path="/" element={<div>메인 화면</div>} />
               <Route path="/artist-registration" element={<ArtistRegistration />} />
               <Route path="/customer-management" element={<div>고객 관리 페이지</div>} />
-              <Route path="/artist-management" element={<ArtistList/>} />
-              <Route path="/board-management" element={<div>게시판 관리 페이지</div>} />
+              <Route path="/artist-management" element={<ArtistList />} />
+              <Route path="/board/:boardType" element={<BoardList />} />
+              <Route path="/board/:boardType/:articleId" element={<BoardDetails enableEdit={true} />} />
             </Routes>
           </main>
         </div>
@@ -89,9 +92,7 @@ const NavLink = ({ to, label }) => {
   const isActive = location.pathname.includes(to);
 
   return (
-    <Link to={to} className={`top-menu-button ${isActive ? 'active' : ''}`}>
-      {label}
-    </Link>
+    <Link to={to} className={`top-menu-button ${isActive ? 'active' : ''}`}> {label}</Link>
   );
 };
 

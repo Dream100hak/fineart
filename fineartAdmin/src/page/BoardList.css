@@ -1,0 +1,74 @@
+/* BoardList.css */
+
+.board-list {
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .board-list h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .board-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  .board-list th,
+  .board-list td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  
+  .board-list th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .board-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .board-list tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .board-list button {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .board-list button:hover {
+    background-color: #0056b3;
+  }
+  
+  .loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #555;
+    margin-top: 50px;
+  }
+  
+  .no-articles {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    margin-top: 30px;
+  }
+  
