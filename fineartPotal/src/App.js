@@ -1,4 +1,3 @@
-// App.js
 import './css/App.css';
 import './css/Homepage.css';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
@@ -11,11 +10,14 @@ import ArtSupplies from './pages/ArtSupplies.js';
 import GlobalArtNewsPage from './pages/GlobalArtNews.js';
 import Article from './pages/Article.js';
 
-import { ArtistProvider } from './ArtistContext'; // ArtistContext import
+import { ArtistProvider } from './ArtistContext'; 
 import ArtistDetail from './pages/ArtistDetail.js';
 import ArtistIntroduction from './pages/ArtistIntroduction.js';
 
 import Gallery from './pages/Gallery.js';
+import ArtworkDetail from './pages/ArtworkDetail.js'; 
+import ArtworkZoom from './pages/ArtworkZoom';
+
 import FreeBoard from './pages/FreeBoard.js';
 import QnABoard from './pages/QnABoard.js';
 import JobBoard from './pages/JobBoard.js';
@@ -67,62 +69,71 @@ function App() {
   return (
     <ArtistProvider> {/* ArtistProvider 추가 */}
       <Router>
-        <div className="section gnb_sec">
-          <header>
-            <div className="inside">
-              <div className="inner">
-                <a id="homePageSubTitle" href="/" tabIndex="1">
-                  FINEART.co.kr
-                </a>
-                <NavigationBar />
-                <div id="authWrap">
-                  <ul className="auth-links">
-                    {user ? (
-                      <>
-                        <li><span>환영합니다, {userName || user.email} 님!</span></li>
-                        <li>
-                          <button className="logout-btn" onClick={() => auth.signOut()}>
-                            Logout
-                          </button>
-                        </li>
-                      </>
-                    ) : (
-                      <>
-                        <li><Link to="/login">Login</Link></li>
-                        <li><Link to="/signup">Sign Up</Link></li>
-                      </>
-                    )}
-                  </ul>
+        <Routes>
+          {/* 확대 보기 페이지 - 메인 레이아웃 없이 간단한 레이아웃만 사용 */}
+          <Route path="/artwork/:id/zoom" element={<ArtworkZoom />} />
+          
+          {/* 메인 레이아웃이 포함된 경로들 */}
+          <Route path="*" element={
+            <div className="section gnb_sec">
+              <header>
+                <div className="inside">
+                  <div className="inner">
+                    <a id="homePageSubTitle" href="/" tabIndex="1">
+                      FINEART.co.kr
+                    </a>
+                    <NavigationBar />
+                    <div id="authWrap">
+                      <ul className="auth-links">
+                        {user ? (
+                          <>
+                            <li><span>환영합니다, {userName || user.email} 님!</span></li>
+                            <li>
+                              <button className="logout-btn" onClick={() => auth.signOut()}>
+                                Logout
+                              </button>
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li><Link to="/login">Login</Link></li>
+                            <li><Link to="/signup">Sign Up</Link></li>
+                          </>
+                        )}
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </header>
+
+              <SwiperBanner />
+
+              <main>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/education" element={<EducationPage />} />
+                  <Route path="/ranking" element={<RankingPage />} />
+                  <Route path="/artSupplies" element={<ArtSupplies />} />
+                  <Route path="/news" element={<GlobalArtNewsPage />} />
+                  <Route path="/:board/article/:id" element={<Article />} />
+                  <Route path="/:board/boardWrite" element={<BoardWrite />} />
+                  <Route path="/gallery" element={<Gallery />} />
+                  <Route path="/artwork/:id" element={<ArtworkDetail />} />
+                  <Route path="/artistIntroduction" element={<ArtistIntroduction />} />
+                  <Route path="/artist/:id" element={<ArtistDetail />} />
+                  <Route path="/free_board" element={<FreeBoard />} />
+                  <Route path="/qna_board" element={<QnABoard />} />
+                  <Route path="/job_board" element={<JobBoard />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/signup-success" element={<SignUpSuccess />} />
+                </Routes>
+              </main>
+
+              <Footer />
             </div>
-          </header>
-
-          <SwiperBanner />
-
-          <main>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/education" element={<EducationPage />} />
-              <Route path="/ranking" element={<RankingPage />} />
-              <Route path="/artSupplies" element={<ArtSupplies />} />
-              <Route path="/news" element={<GlobalArtNewsPage />} />
-              <Route path="/:board/article/:id" element={<Article />} />
-              <Route path="/:board/boardWrite" element={<BoardWrite />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/artistIntroduction" element={<ArtistIntroduction />} />
-              <Route path="/artist/:id" element={<ArtistDetail />} />
-              <Route path="/free_board" element={<FreeBoard />} />
-              <Route path="/qna_board" element={<QnABoard />} />
-              <Route path="/job_board" element={<JobBoard />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/signup-success" element={<SignUpSuccess />} />
-            </Routes>
-          </main>
-
-          <Footer />
-        </div>
+          } />
+        </Routes>
       </Router>
     </ArtistProvider> // ArtistProvider 종료
   );

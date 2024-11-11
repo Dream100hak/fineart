@@ -15,7 +15,6 @@ const ArtworkModal = ({ canvasSizes, newArtwork, onSave, onClose, editingIndex }
         rotationAngle: 0,
     });
 
-
     const [selectedCanvasType, setSelectedCanvasType] = useState('F');
     const [selectedCanvasSize, setSelectedCanvasSize] = useState(1);
     const [isImageOverlayOpen, setIsImageOverlayOpen] = useState(false);
@@ -73,7 +72,7 @@ const ArtworkModal = ({ canvasSizes, newArtwork, onSave, onClose, editingIndex }
 
     const handleImageOverlay = (image) => {
         if (typeof image === 'string') {
-            setOverlayImageSrc(image.startsWith('http') ? image : `${image}`);
+            setOverlayImageSrc(image.startsWith('http') ? image : `/api${image}`);
         } else {
             setOverlayImageSrc(URL.createObjectURL(image));
         }

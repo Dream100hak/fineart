@@ -215,6 +215,7 @@ const ArtistRegistration = ({ artist, onClose, onUpdate }) => {
             try {
               const uploadedImageUrl = await handleUploadImage(artwork.image_url, artwork.rotation_angle);
               artwork.image_url = uploadedImageUrl;
+              console.log("이미지 URL : " + artwork.image_url);
             } catch (uploadError) {
               alert('이미지 업로드 중 오류가 발생했습니다.');
               console.error('이미지 업로드 실패:', uploadError);

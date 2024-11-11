@@ -2,14 +2,20 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// 공통 저장소 설정 (날짜별 폴더 생성)
+// 공통 저장소 설정 (날짜별 폴더 생성, 운영체제별 경로 설정 추가)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const today = new Date();
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const day = String(today.getDate()).padStart(2, '0');
-    const folderPath = path.join('uploads', year + '-' + month + '-' + day);
+
+    // 운영체제에 따른 파일 저장 경로 설정
+    const baseUploadPath = process.platform === 'win32' 
+      ? path.resolve('uploads') // Windows 환경에서는 프로젝트 내부 'uploads' 폴더 사용
+      : '/var/www/uploads'; // Linux 환경에서는 '/var/www/uploads' 사용
+
+    const folderPath = path.join(baseUploadPath, `${year}-${month}-${day}`);
 
     // 폴더가 없는 경우 생성
     if (!fs.existsSync(folderPath)) {

@@ -1,0 +1,179 @@
+/* Artwork Detail Page Styles */
+.artwork-detail-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .artwork-detail-container h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .artwork-detail-container img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+  }
+  
+  .artwork-detail-container p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+  
+
+  /* Zoom Button Styles */
+  .artwork-detail-container .zoom-button {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .artwork-detail-container .zoom-button:hover {
+    background-color: #218838;
+  }
+  
+  /* Button Styles */
+  .artwork-detail-container .back-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .artwork-detail-container .back-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .artwork-detail-container .back-button:active {
+    background-color: #003d7a;
+  }
+  
+  /* Zoom Page Styles */
+  .zoom-page-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .zoom-page-container .fixed-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 1000;
+  }
+  
+  .zoom-page-container img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 80vh;
+    margin: auto;
+    cursor: zoom-in;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .zoom-page-container img:active {
+    cursor: zoom-out;
+  }
+  
+  /* Zoom Progress Bar Styles */
+  .zoom-progress {
+    width: 80%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: 1000;
+  }
+  
+  .zoom-progress .progress-bar {
+    width: 0;
+    height: 100%;
+    background-color: #007bff;
+    transition: width 0.3s ease;
+  }
+  
+  /* Close Button Styles */
+  .close-button {
+    background-color: #ff4b4b;
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .close-button:hover {
+    background-color: #e63e3e;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .artwork-detail-container {
+      padding: 15px;
+    }
+  
+    .artwork-detail-container h1 {
+      font-size: 2rem;
+    }
+  
+    .artwork-detail-container p {
+      font-size: 1rem;
+    }
+  
+    .artwork-detail-container .back-button {
+      padding: 8px 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .artwork-detail-container h1 {
+      font-size: 1.75rem;
+    }
+  
+    .artwork-detail-container p {
+      font-size: 0.9rem;
+    }
+  }
+  

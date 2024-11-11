@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import '../css/Gallery.css';
 import axios from 'axios';
 import { getCanvasSizes } from 'Common';
+import { useNavigate } from 'react-router-dom';
 
 function Gallery() {
   const [artworks, setArtworks] = useState([]);
@@ -18,6 +19,8 @@ function Gallery() {
   const [activeFilters, setActiveFilters] = useState({});
   const [canvasSizes, setCanvasSizes] = useState({});
   const [artists, setArtists] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
 
@@ -36,8 +39,8 @@ function Gallery() {
         const response = await axios.get(query);
         if (response.status !== 200) throw new Error('작품을 불러오지 못했습니다.');
         const data = response.data;
-        setArtworks(data);
-
+        
+        // Artist 정보 추가
         const artistIds = [...new Set(data.map(artwork => artwork.artist_id))];
         const artistResponses = await Promise.all(artistIds.map(id => axios.get(`/api/artists/${id}`)));
         const artistsData = artistResponses.reduce((acc, res) => {
@@ -45,6 +48,13 @@ function Gallery() {
           return acc;
         }, {});
         setArtists(artistsData);
+        
+        // 작품 데이터에 작가 이름 추가
+        const artworksWithArtistNames = data.map(artwork => ({
+          ...artwork,
+          artist_name: artistsData[artwork.artist_id]?.name || 'Unknown Artist'
+        }));
+        setArtworks(artworksWithArtistNames);
 
       } catch (error) {
         console.error(error);
@@ -89,6 +99,10 @@ function Gallery() {
       is_rentable: '',
     });
     setActiveFilters({});
+  };
+
+  const handleArtworkClick = (artwork) => {
+    navigate(`/artwork/${artwork.id}`, { state: { artistName: artwork.artist_name } });
   };
 
   return (
@@ -214,19 +228,19 @@ function Gallery() {
         <p>로딩 중...</p>
       ) : (
         <div className="gallery-grid">
-          {artworks.map((artwork) => (
-            <div key={artwork.id} className="gallery-item">
-              <img src={`${artwork.image_url}`} alt={artwork.title} />
-              <div className="overlay">
-                <h2>{artwork.name}</h2>
-                <p>{artists[artwork.artist_id]?.name || 'Unknown Artist'}</p>
-                <p>{artwork.category}</p>
-                <p>{artwork.canvas_type}형 {artwork.canvas_size}호 ({canvasSizes[artwork.canvas_type]?.[artwork.canvas_size]}cm)</p>
-                <p>렌탈 가능 여부: {artwork.is_rentable ? '가능' : '불가능'}</p>
-              </div>
+        {artworks.map((artwork) => (
+          <div key={artwork.id} className="gallery-item" onClick={() => handleArtworkClick(artwork)}>
+            <img src={`${artwork.image_url}`} alt={artwork.title} />
+            <div className="overlay">
+              <h2>{artwork.name}</h2>
+              <p>{artwork.artist_name}</p>
+              <p>{artwork.category}</p>
+              <p>{artwork.canvas_type}형 {artwork.canvas_size}호 ({canvasSizes[artwork.canvas_type]?.[artwork.canvas_size]}cm)</p>
+              <p>렌탈 가능 여부: {artwork.is_rentable ? '가능' : '불가능'}</p>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
       )}
     </div>
   );

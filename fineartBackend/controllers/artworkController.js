@@ -1,4 +1,5 @@
 // controllers/artworkController.js
+const path = require('path');  // Node.js path 모듈 추가
 const { v4: uuidv4 } = require('uuid');
 const { promisePool } = require('../db/dbConnection');
 const { imageUpload } = require('../config/multerConfig');
@@ -140,7 +141,7 @@ async function addArtwork(req, res) {
   }
 }
 
-// 작품 이미지 업로드
+//작품이미지업로드
 async function uploadArtworkImage(req, res) {
   try {
     imageUpload.single('image')(req, res, (err) => {
@@ -152,8 +153,19 @@ async function uploadArtworkImage(req, res) {
         return res.status(400).json({ error: '업로드된 파일이 없습니다.' });
       }
 
-      // 업로드된 파일 경로를 반환
-      const imageUrl = `/${req.file.path.replace(/\\/g, '/')}`;
+      // 파일 업로드 관련 경로 로그 출력
+      console.log('업로드된 파일 이름:', req.file.filename);
+      console.log('업로드된 파일 원본 경로:', req.file.path);
+
+      // 올바른 URL 경로 생성
+      const year = new Date().getFullYear();
+      const month = String(new Date().getMonth() + 1).padStart(2, '0');
+      const day = String(new Date().getDate()).padStart(2, '0');
+      
+      // 클라이언트에서 접근 가능한 URL 생성 (Nginx alias 설정에 맞게)
+      const imageUrl = `/uploads/${year}-${month}-${day}/${req.file.filename}`;
+      console.log('최종 이미지 URL:', imageUrl);
+      
       res.status(200).json({ imageUrl });
     });
   } catch (err) {

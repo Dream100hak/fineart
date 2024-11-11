@@ -36,7 +36,7 @@ const ArtistDetail = () => {
       const response = await axios.get(`/api/artists/${id}`);
       setArtist(response.data);
       setArtworks(response.data.artworks);
-      console.log(response.data.artworks);
+      console.log(artworks[0]);
 
     } catch (error) {
       console.error('작가 정보를 불러오는 중 오류가 발생했습니다:', error);
@@ -145,7 +145,7 @@ const ArtistDetail = () => {
               onClick={() => handleArtworkClick(index)}
             >
               <img
-                src={`${process.env.REACT_APP_API_URL}${artwork.image_url}`}
+                src={`${artwork.image_url}`}
                 alt={artwork.name}
                 className="artwork-image"
               />
