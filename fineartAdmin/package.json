@@ -10,6 +10,8 @@
     "axios": "^1.7.7",
     "Common": "file:../Common",
     "quill": "^2.0.2",
+    "quill-image-resize": "^3.0.9",
+    "quill-image-resize-module": "^3.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-quill": "^2.0.0",

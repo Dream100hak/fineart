@@ -3,6 +3,9 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import './BoardDetails.css';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import ImageResize from 'quill-image-resize';
+
+Quill.register('modules/imageResize', ImageResize);
 
 // 커스텀 비디오 블롯 정의 및 등록
 const BlockEmbed = Quill.import('blots/block/embed');
@@ -57,6 +60,89 @@ class CustomVideoBlot extends BlockEmbed {
 CustomVideoBlot.blotName = 'customVideo';
 CustomVideoBlot.tagName = 'div';
 Quill.register(CustomVideoBlot);
+
+// 이미지 리사이즈 후 서버로 업로드하는 함수
+const useImageResizeUpload = (quillRef, boardType) => {
+  useEffect(() => {
+    if (quillRef.current) {
+      const editor = quillRef.current.getEditor();
+
+      const handleImageResize = (mutationsList) => {
+        for (const mutation of mutationsList) {
+          if (
+            mutation.type === 'attributes' &&
+            mutation.target.tagName === 'IMG' &&
+            (mutation.attributeName === 'width' || mutation.attributeName === 'height')
+          ) {
+            const img = mutation.target;
+
+            // 리사이즈된 이미지 업로드 처리
+            (async () => {
+              try {
+                const newWidth = img.width;
+                const newHeight = img.height;
+
+                // 캔버스를 사용하여 리사이즈된 이미지 생성
+                const canvas = document.createElement('canvas');
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                const ctx = canvas.getContext('2d');
+                const image = new Image();
+
+                // CORS 설정
+                image.crossOrigin = 'Anonymous';
+
+                image.onload = async () => {
+                  ctx.drawImage(image, 0, 0, newWidth, newHeight);
+                  canvas.toBlob(async (blob) => {
+                    const formData = new FormData();
+                    formData.append('image', blob, 'resized-image.png');
+
+                    const res = await fetch(`/api/board/${boardType}/upload/image`, {
+                      method: 'POST',
+                      body: formData,
+                    });
+
+                    if (!res.ok) throw new Error('이미지 업로드 실패');
+                    const data = await res.json();
+
+                    // 이미지 src를 새로운 URL로 업데이트
+                    img.src = data.url;
+
+                    // width와 height 속성 제거 (이미지 자체가 리사이즈되었으므로)
+                    img.removeAttribute('width');
+                    img.removeAttribute('height');
+                  }, 'image/png');
+                };
+
+                image.onerror = () => {
+                  console.error('이미지를 로드하는 데 실패했습니다.');
+                };
+
+                image.src = img.src;
+              } catch (error) {
+                console.error('이미지 업로드 실패:', error);
+              }
+            })();
+          }
+        }
+      };
+
+      // MutationObserver 설정
+      const observer = new MutationObserver(handleImageResize);
+      observer.observe(editor.root, {
+        attributes: true,
+        subtree: true,
+        attributeFilter: ['width', 'height'],
+      });
+
+      // 클린업 함수
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [quillRef, boardType]);
+};
 
 function BoardDetail() {
   const { articleId } = useParams(); // 수정할 게시글 ID 가져오기
@@ -154,8 +240,13 @@ function BoardDetail() {
           },
         },
       },
+      imageResize: {
+        modules: ['Resize', 'DisplaySize', 'Toolbar'],
+      },
     };
   }, [boardType]);
+
+  useImageResizeUpload(quillRef, boardType);
 
   // 게시글 데이터 불러오기
   useEffect(() => {
@@ -179,68 +270,43 @@ function BoardDetail() {
     fetchArticle();
   }, [articleId, boardType]);
 
+  if (loading) {
+    return <div className="loading">로딩 중...</div>;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const method = articleId ? 'PUT' : 'POST';
-      const endpoint = articleId
-        ? `/api/board/${boardType}/articles/${articleId}`
-        : `/api/board/${boardType}/articles`;
-
-      const response = await fetch(endpoint, {
-        method: method,
+      const response = await fetch(`/api/board/${boardType}/articles/${articleId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           title,
           content,
-          writer: '관리자', // Firebase 인증을 사용하지 않으므로 임시로 '관리자'로 설정
         }),
       });
 
-      if (response.ok) {
-        alert(articleId ? '게시글이 성공적으로 수정되었습니다.' : '게시글이 성공적으로 작성되었습니다.');
-        navigate(`/board/${boardType}`);
-      } else {
-        throw new Error(articleId ? '게시글 수정 실패' : '게시글 작성 실패');
+      if (!response.ok) {
+        throw new Error('게시글 수정 실패');
       }
+
+      alert('게시글이 성공적으로 수정되었습니다.');
+      navigate(-1);
     } catch (error) {
-      console.error('게시글 처리 중 오류:', error);
-      alert('게시글 처리 중 문제가 발생했습니다.');
+      console.error('게시글 수정 실패:', error);
+      alert('게시글 수정 중 문제가 발생했습니다.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (loading) {
-    return <div className="loading">로딩 중...</div>;
-  }
-
-
-  const formats = [
-    'header',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'color',
-    'background',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'video',
-    'customVideo',
-    'align',
-  ];
-
   return (
     <div className="boarddetail-container">
-      <h1>{articleId ? '게시글 수정' : '게시글 작성'}</h1>
+      <h1>게시글 수정</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -255,11 +321,10 @@ function BoardDetail() {
           value={content}
           onChange={setContent}
           modules={modules}
-          formats={formats}
           placeholder="내용을 입력하세요"
         />
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? '처리 중...' : articleId ? '수정' : '작성'}
+          {isSubmitting ? '수정 중...' : '수정'}
         </button>
       </form>
     </div>
