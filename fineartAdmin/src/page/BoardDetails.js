@@ -5,6 +5,11 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
 
+// Quill에 폰트 사이즈 등록
+const Size = Quill.import('attributors/class/size');
+Size.whitelist = ['8px', '10px', '12px', '14px', '18px', '24px', '36px' , '72px'];
+Quill.register(Size, true);
+
 Quill.register('modules/imageResize', ImageResize);
 
 // 커스텀 비디오 블롯 정의 및 등록
@@ -171,7 +176,8 @@ function BoardDetail() {
     return {
       toolbar: {
         container: [
-          [{ header: [1, 2, false] }],
+          [{ 'font': [] }],
+          [{ 'size': ['8px', '10px', '12px', '14px', '18px', '24px', '36px' , '72px'] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
           [{ color: [] }, { background: [] }],
           [{ align: [] }],
@@ -245,6 +251,7 @@ function BoardDetail() {
       },
     };
   }, [boardType]);
+
 
   useImageResizeUpload(quillRef, boardType);
 
