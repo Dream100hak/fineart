@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import './BoardDetails.css';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -59,111 +59,30 @@ CustomVideoBlot.tagName = 'div';
 Quill.register(CustomVideoBlot);
 
 function BoardDetail() {
+  const { articleId } = useParams(); // 수정할 게시글 ID 가져오기
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
   const quillRef = useRef(null);
 
-  const boardType = useMemo(() => {
-    if (location.pathname.includes('/free_board')) {
+  const determineBoardType = (path) => {
+    if (path.includes('/free_board')) {
       return 'free_board';
-    } else if (location.pathname.includes('/qna_board')) {
+    } else if (path.includes('/qna_board')) {
       return 'qna_board';
-    } else if (location.pathname.includes('/job_board')) {
+    } else if (path.includes('/job_board')) {
       return 'job_board';
     }
     return 'free_board';
-  }, [location.pathname]);
-
-  // 이미지 핸들러
-  const imageHandler = () => {
-    const editor = quillRef.current.getEditor();
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      const file = input.files[0];
-      if (file) {
-        try {
-          const formData = new FormData();
-          formData.append('image', file);
-
-          const res = await fetch(`/api/board/${boardType}/upload/image`, {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await res.json();
-          const imageUrl = data.url;
-
-          const range = editor.getSelection(true);
-          editor.insertEmbed(range.index, 'image', imageUrl);
-          editor.setSelection(range.index + 1);
-        } catch (error) {
-          console.error('이미지 업로드 실패:', error);
-          alert('이미지 업로드 중 문제가 발생했습니다.');
-        }
-      }
-    };
   };
 
-  // 동영상 핸들러
-  const videoHandler = () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'video/*');
-    input.click();
-  
-    input.onchange = () => {
-      const file = input.files[0];
-      if (file) {
-        const videoURL = URL.createObjectURL(file);
-        const editor = quillRef.current.getEditor();
-        const range = editor.getSelection(true);
-        // 기존 커스텀 방식 대신 간단히 embed 추가
-        editor.insertEmbed(range.index, 'video', videoURL);
-        editor.setSelection(range.index + 1);
-      }
-    };
-  };
+  const boardType = determineBoardType(location.pathname);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch(`/api/board/${boardType}/articles`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          content,
-          writer: '관리자', // Firebase 인증을 사용하지 않으므로 임시로 '관리자'로 설정
-        }),
-      });
-
-      if (response.ok) {
-        alert('게시글이 성공적으로 작성되었습니다.');
-        navigate(`/board/${boardType}`);
-      } else {
-        throw new Error('게시글 작성 실패');
-      }
-    } catch (error) {
-      console.error('게시글 작성 중 오류:', error);
-      alert('게시글 작성 중 문제가 발생했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const modules = useMemo(
-    () => ({
+  const modules = useMemo(() => {
+    return {
       toolbar: {
         container: [
           [{ header: [1, 2, false] }],
@@ -175,13 +94,131 @@ function BoardDetail() {
           ['clean'],
         ],
         handlers: {
-          image: imageHandler,
-          video: videoHandler,
+          image: () => {
+            const editor = quillRef.current.getEditor();
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+
+            input.onchange = async () => {
+              const file = input.files[0];
+              if (file) {
+                try {
+                  const formData = new FormData();
+                  formData.append('image', file);
+
+                  const res = await fetch(`/api/board/${boardType}/upload/image`, {
+                    method: 'POST',
+                    body: formData,
+                  });
+
+                  if (!res.ok) {
+                    throw new Error('이미지 업로드 실패');
+                  }
+
+                  const data = await res.json();
+                  const imageUrl = data.url;
+
+                  const range = editor.getSelection(true);
+                  editor.insertEmbed(range.index, 'image', imageUrl);
+                  editor.setSelection(range.index + 1);
+                } catch (error) {
+                  console.error('이미지 업로드 실패:', error);
+                  alert('이미지 업로드 중 문제가 발생했습니다.');
+                }
+              } else {
+                alert('이미지를 선택해 주세요.');
+              }
+            };
+          },
+          video: () => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'video/*');
+            input.click();
+
+            input.onchange = () => {
+              const file = input.files[0];
+              if (file) {
+                const videoURL = URL.createObjectURL(file);
+                const editor = quillRef.current.getEditor();
+                const range = editor.getSelection(true);
+                editor.insertEmbed(range.index, 'customVideo', {
+                  thumbnailUrl: '',
+                  videoUrl: videoURL,
+                });
+                editor.setSelection(range.index + 1);
+              }
+            };
+          },
         },
       },
-    }),
-    []
-  );
+    };
+  }, [boardType]);
+
+  // 게시글 데이터 불러오기
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        if (articleId) {
+          const response = await fetch(`/api/board/${boardType}/articles/${articleId}`);
+          if (!response.ok) throw new Error('게시글을 불러오는 데 실패했습니다.');
+          
+          const data = await response.json();
+          setTitle(data.title);
+          setContent(data.content);
+        }
+      } catch (error) {
+        console.error('게시글 불러오기 실패:', error);
+        alert('게시글을 불러오는 중 문제가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchArticle();
+  }, [articleId, boardType]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const method = articleId ? 'PUT' : 'POST';
+      const endpoint = articleId
+        ? `/api/board/${boardType}/articles/${articleId}`
+        : `/api/board/${boardType}/articles`;
+
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title,
+          content,
+          writer: '관리자', // Firebase 인증을 사용하지 않으므로 임시로 '관리자'로 설정
+        }),
+      });
+
+      if (response.ok) {
+        alert(articleId ? '게시글이 성공적으로 수정되었습니다.' : '게시글이 성공적으로 작성되었습니다.');
+        navigate(`/board/${boardType}`);
+      } else {
+        throw new Error(articleId ? '게시글 수정 실패' : '게시글 작성 실패');
+      }
+    } catch (error) {
+      console.error('게시글 처리 중 오류:', error);
+      alert('게시글 처리 중 문제가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="loading">로딩 중...</div>;
+  }
+
 
   const formats = [
     'header',
@@ -203,7 +240,7 @@ function BoardDetail() {
 
   return (
     <div className="boarddetail-container">
-      <h1>게시글 작성</h1>
+      <h1>{articleId ? '게시글 수정' : '게시글 작성'}</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -222,7 +259,7 @@ function BoardDetail() {
           placeholder="내용을 입력하세요"
         />
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? '작성 중...' : '작성'}
+          {isSubmitting ? '처리 중...' : articleId ? '수정' : '작성'}
         </button>
       </form>
     </div>

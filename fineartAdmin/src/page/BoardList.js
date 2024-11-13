@@ -26,7 +26,7 @@ function BoardList() {
   const handleEdit = (articleId) => {
     navigate(`/board/${boardType}/${articleId}`);
   };
-
+  
   if (loading) {
     return <div>로딩 중...</div>;
   }

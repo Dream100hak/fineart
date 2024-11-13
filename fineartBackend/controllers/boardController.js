@@ -122,10 +122,14 @@ async function uploadImage(req, res) {
   const file = req.file;
 
   if (file) {
-    const url = `http://localhost:5000/uploads/${file.filename}`;
+    // 파일이 저장된 경로에 날짜별 폴더를 포함
+    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD 형식
+    const url = `${req.protocol}://${req.get('host')}/uploads/${currentDate}/${file.filename}`;
+    console.log(`이미지 업로드 성공: ${url}`);
     res.status(200).json({ url });
   } else {
-    res.status(400).json({ error: '이미지 업로드 실패' });
+    console.error('이미지 업로드 실패: 파일이 없습니다.');
+    res.status(400).json({ error: '이미지 업로드 실패: 파일이 없습니다.' });
   }
 }
 
@@ -134,10 +138,14 @@ async function uploadVideo(req, res) {
   const file = req.file;
 
   if (file) {
-    const url = `http://localhost:5000/uploads/${file.filename}`;
+    // 파일이 저장된 경로에 날짜별 폴더를 포함
+    const currentDate = new Date().toISOString().split('T')[0];
+    const url = `${req.protocol}://${req.get('host')}/uploads/${currentDate}/${file.filename}`;
+    console.log(`동영상 업로드 성공: ${url}`);
     res.status(200).json({ url });
   } else {
-    res.status(400).json({ error: '동영상 업로드 실패' });
+    console.error('동영상 업로드 실패: 파일이 없습니다.');
+    res.status(400).json({ error: '동영상 업로드 실패: 파일이 없습니다.' });
   }
 }
 
@@ -146,12 +154,17 @@ async function uploadThumbnail(req, res) {
   const file = req.file;
 
   if (file) {
-    const url = `http://localhost:5000/uploads/${file.filename}`;
+    // 파일이 저장된 경로에 날짜별 폴더를 포함
+    const currentDate = new Date().toISOString().split('T')[0];
+    const url = `${req.protocol}://${req.get('host')}/uploads/${currentDate}/${file.filename}`;
+    console.log(`썸네일 업로드 성공: ${url}`);
     res.status(200).json({ url });
   } else {
-    res.status(400).json({ error: '썸네일 업로드 실패' });
+    console.error('썸네일 업로드 실패: 파일이 없습니다.');
+    res.status(400).json({ error: '썸네일 업로드 실패: 파일이 없습니다.' });
   }
 }
+
 
 module.exports = {
   createArticle,
