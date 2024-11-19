@@ -5,9 +5,56 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
 
+const Image = Quill.import('formats/image');
+
+class ImageFormat extends Image {
+  static create(value) {
+    const node = super.create(value);
+    if (typeof value === 'object') {
+      node.setAttribute('src', value.src);
+      if (value.width) {
+        node.setAttribute('width', value.width);
+      }
+      if (value.height) {
+        node.setAttribute('height', value.height);
+      }
+    } else {
+      node.setAttribute('src', value);
+    }
+    return node;
+  }
+
+  static formats(domNode) {
+    const formats = super.formats(domNode);
+    if (domNode.hasAttribute('width')) {
+      formats.width = domNode.getAttribute('width');
+    }
+    if (domNode.hasAttribute('height')) {
+      formats.height = domNode.getAttribute('height');
+    }
+    return formats;
+  }
+
+  format(name, value) {
+    if (name === 'width' || name === 'height') {
+      if (value) {
+        this.domNode.setAttribute(name, value);
+      } else {
+        this.domNode.removeAttribute(name);
+      }
+    } else {
+      super.format(name, value);
+    }
+  }
+}
+
+ImageFormat.blotName = 'image';
+ImageFormat.tagName = 'img';
+Quill.register(ImageFormat, true);
+
 // Quill에 폰트 사이즈 등록
 const Size = Quill.import('attributors/class/size');
-Size.whitelist = ['8px', '10px', '12px', '14px', '18px', '24px', '36px' , '72px'];
+Size.whitelist = ['8px', '10px', '12px', '14px', '18px', '24px', '36px', '72px'];
 Quill.register(Size, true);
 
 Quill.register('modules/imageResize', ImageResize);
@@ -18,11 +65,12 @@ const BlockEmbed = Quill.import('blots/block/embed');
 class CustomVideoBlot extends BlockEmbed {
   static create(value) {
     const node = super.create();
+    node.setAttribute('class', 'custom-video-blot'); // 고유한 클래스명 설정
     const container = document.createElement('div');
     container.setAttribute('class', 'video-container');
 
     const img = document.createElement('img');
-    img.setAttribute('src', value.thumbnailUrl);
+    img.setAttribute('src', value.thumbnailUrl || '');
     img.setAttribute('alt', '동영상 썸네일');
     img.setAttribute('class', 'video-thumbnail');
 
@@ -55,15 +103,21 @@ class CustomVideoBlot extends BlockEmbed {
 
   static value(node) {
     const container = node.querySelector('.video-container');
+    if (!container) {
+      console.error('CustomVideoBlot: container not found');
+      return {};
+    }
+    const thumbnail = container.querySelector('.video-thumbnail');
     return {
-      thumbnailUrl: container.querySelector('.video-thumbnail').getAttribute('src'),
-      videoUrl: container.getAttribute('data-video-url'),
+      thumbnailUrl: thumbnail ? thumbnail.getAttribute('src') : '',
+      videoUrl: container.getAttribute('data-video-url') || '',
     };
   }
 }
 
 CustomVideoBlot.blotName = 'customVideo';
-CustomVideoBlot.tagName = 'div';
+CustomVideoBlot.tagName = 'div'; // 표준 태그 사용
+CustomVideoBlot.className = 'custom-video-blot'; // 고유한 클래스명 설정
 Quill.register(CustomVideoBlot);
 
 // 이미지 리사이즈 후 서버로 업로드하는 함수
@@ -81,59 +135,30 @@ const useImageResizeUpload = (quillRef, boardType) => {
           ) {
             const img = mutation.target;
 
-            // 리사이즈된 이미지 업로드 처리
             (async () => {
               try {
-                const newWidth = img.width;
-                const newHeight = img.height;
+                const newWidth = img.getAttribute('width');
+                const newHeight = img.getAttribute('height');
 
-                // 캔버스를 사용하여 리사이즈된 이미지 생성
-                const canvas = document.createElement('canvas');
-                canvas.width = newWidth;
-                canvas.height = newHeight;
-                const ctx = canvas.getContext('2d');
-                const image = new Image();
+                // Quill에서 이미지의 위치(index)를 찾습니다.
+                const range = editor.getSelection();
+                const [blot] = editor.getLeaf(range ? range.index : 0);
 
-                // CORS 설정
-                image.crossOrigin = 'Anonymous';
+                if (blot && blot.domNode === img) {
+                  // Quill의 포맷을 사용하여 이미지 속성을 업데이트합니다.
+                  editor.format('width', newWidth);
+                  editor.format('height', newHeight);
+                }
 
-                image.onload = async () => {
-                  ctx.drawImage(image, 0, 0, newWidth, newHeight);
-                  canvas.toBlob(async (blob) => {
-                    const formData = new FormData();
-                    formData.append('image', blob, 'resized-image.png');
-
-                    const res = await fetch(`/api/board/${boardType}/upload/image`, {
-                      method: 'POST',
-                      body: formData,
-                    });
-
-                    if (!res.ok) throw new Error('이미지 업로드 실패');
-                    const data = await res.json();
-
-                    // 이미지 src를 새로운 URL로 업데이트
-                    img.src = data.url;
-
-                    // width와 height 속성 제거 (이미지 자체가 리사이즈되었으므로)
-                    img.removeAttribute('width');
-                    img.removeAttribute('height');
-                  }, 'image/png');
-                };
-
-                image.onerror = () => {
-                  console.error('이미지를 로드하는 데 실패했습니다.');
-                };
-
-                image.src = img.src;
+                // 이미지 업로드 로직은 필요 없다면 생략 가능합니다.
               } catch (error) {
-                console.error('이미지 업로드 실패:', error);
+                console.error('이미지 업데이트 실패:', error);
               }
             })();
           }
         }
       };
 
-      // MutationObserver 설정
       const observer = new MutationObserver(handleImageResize);
       observer.observe(editor.root, {
         attributes: true,
@@ -141,7 +166,6 @@ const useImageResizeUpload = (quillRef, boardType) => {
         attributeFilter: ['width', 'height'],
       });
 
-      // 클린업 함수
       return () => {
         observer.disconnect();
       };
@@ -177,7 +201,7 @@ function BoardDetail() {
       toolbar: {
         container: [
           [{ 'font': [] }],
-          [{ 'size': ['8px', '10px', '12px', '14px', '18px', '24px', '36px' , '72px'] }],
+          [{ 'size': ['8px', '10px', '12px', '14px', '18px', '24px', '36px', '72px'] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
           [{ color: [] }, { background: [] }],
           [{ align: [] }],
@@ -212,8 +236,15 @@ function BoardDetail() {
                   const data = await res.json();
                   const imageUrl = data.url;
 
+                  const editor = quillRef.current.getEditor();
                   const range = editor.getSelection(true);
-                  editor.insertEmbed(range.index, 'image', imageUrl);
+
+                  // 이미지 삽입 시에도 커스텀 이미지 블롯을 사용하도록 수정
+                  editor.insertEmbed(range.index, 'image', {
+                    src: imageUrl,
+                    width: 'auto',  // 기본값 설정
+                    height: 'auto', // 기본값 설정
+                  });
                   editor.setSelection(range.index + 1);
                 } catch (error) {
                   console.error('이미지 업로드 실패:', error);
@@ -230,17 +261,40 @@ function BoardDetail() {
             input.setAttribute('accept', 'video/*');
             input.click();
 
-            input.onchange = () => {
+            input.onchange = async () => {
               const file = input.files[0];
               if (file) {
-                const videoURL = URL.createObjectURL(file);
-                const editor = quillRef.current.getEditor();
-                const range = editor.getSelection(true);
-                editor.insertEmbed(range.index, 'customVideo', {
-                  thumbnailUrl: '',
-                  videoUrl: videoURL,
-                });
-                editor.setSelection(range.index + 1);
+                try {
+                  // 서버에 동영상 파일 업로드
+                  const formData = new FormData();
+                  formData.append('video', file);
+
+                  // 동영상 업로드 API 호출
+                  const res = await fetch(`/api/board/${boardType}/upload/video`, {
+                    method: 'POST',
+                    body: formData,
+                  });
+
+                  if (!res.ok) {
+                    throw new Error('동영상 업로드 실패');
+                  }
+
+                  const data = await res.json();
+                  const videoURL = data.url;
+
+                  const editor = quillRef.current.getEditor();
+                  const range = editor.getSelection(true);
+                  editor.insertEmbed(range.index, 'customVideo', {
+                    thumbnailUrl: '',
+                    videoUrl: videoURL,
+                  });
+                  editor.setSelection(range.index + 1);
+                } catch (error) {
+                  console.error('동영상 업로드 실패:', error);
+                  alert('동영상 업로드 중 문제가 발생했습니다.');
+                }
+              } else {
+                alert('동영상을 선택해 주세요.');
               }
             };
           },
@@ -262,7 +316,7 @@ function BoardDetail() {
         if (articleId) {
           const response = await fetch(`/api/board/${boardType}/articles/${articleId}`);
           if (!response.ok) throw new Error('게시글을 불러오는 데 실패했습니다.');
-          
+
           const data = await response.json();
           setTitle(data.title);
           setContent(data.content);
@@ -311,6 +365,29 @@ function BoardDetail() {
     }
   };
 
+  const formats = [
+    'header',
+    'font',
+    'size',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'color',
+    'background',
+    'list',
+    'bullet',
+    'align',
+    'link',
+    'image',
+    'video',
+    'customVideo',
+    'width',    // 추가
+    'height',   // 추가
+  ];
+
+
   return (
     <div className="boarddetail-container">
       <h1>게시글 수정</h1>
@@ -328,6 +405,7 @@ function BoardDetail() {
           value={content}
           onChange={setContent}
           modules={modules}
+          formats={formats}
           placeholder="내용을 입력하세요"
         />
         <button type="submit" disabled={isSubmitting}>
