@@ -5,10 +5,6 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
 
-const AlignStyle = Quill.import('attributors/style/align');
-AlignStyle.whitelist = ['right', 'center', 'justify'];
-Quill.register(AlignStyle, true);
-
 // Quill에 폰트 사이즈 등록
 const Size = Quill.import('attributors/class/size');
 Size.whitelist = ['8px', '10px', '12px', '14px', '18px', '24px', '36px', '72px'];
