@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './BoardList.css'
+import './BoardList.css';
 
 function BoardList() {
   const { boardType } = useParams(); // URL 경로에서 boardType을 가져옴
@@ -26,6 +26,10 @@ function BoardList() {
   const handleEdit = (articleId) => {
     navigate(`/board/${boardType}/${articleId}`);
   };
+
+  const handleCreate = () => {
+    navigate(`/board/${boardType}/write`);
+  };
   
   if (loading) {
     return <div>로딩 중...</div>;
@@ -34,6 +38,7 @@ function BoardList() {
   return (
     <div className="board-list">
       <h2>{boardType === 'free_board' ? '자유게시판' : boardType === 'job_board' ? '구인구직' : 'Q&A 게시판'}</h2>
+      <button className="create-button" onClick={handleCreate}>글 작성하기</button>
       <table>
         <thead>
           <tr>
@@ -47,7 +52,7 @@ function BoardList() {
         <tbody>
           {articles.map((article) => (
             <tr key={article.id}>
-              <td>{article.title}</td>
+              <td onClick={() => handleEdit(article.id)}>{article.title}</td>
               <td>{article.writer}</td>
               <td>{new Date(article.date).toLocaleString()}</td>
               <td>{article.views}</td>

@@ -5,52 +5,9 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
 
-const Image = Quill.import('formats/image');
-
-class ImageFormat extends Image {
-  static create(value) {
-    const node = super.create(value);
-    if (typeof value === 'object') {
-      node.setAttribute('src', value.src);
-      if (value.width) {
-        node.setAttribute('width', value.width);
-      }
-      if (value.height) {
-        node.setAttribute('height', value.height);
-      }
-    } else {
-      node.setAttribute('src', value);
-    }
-    return node;
-  }
-
-  static formats(domNode) {
-    const formats = super.formats(domNode);
-    if (domNode.hasAttribute('width')) {
-      formats.width = domNode.getAttribute('width');
-    }
-    if (domNode.hasAttribute('height')) {
-      formats.height = domNode.getAttribute('height');
-    }
-    return formats;
-  }
-
-  format(name, value) {
-    if (name === 'width' || name === 'height') {
-      if (value) {
-        this.domNode.setAttribute(name, value);
-      } else {
-        this.domNode.removeAttribute(name);
-      }
-    } else {
-      super.format(name, value);
-    }
-  }
-}
-
-ImageFormat.blotName = 'image';
-ImageFormat.tagName = 'img';
-Quill.register(ImageFormat, true);
+const AlignStyle = Quill.import('attributors/style/align');
+AlignStyle.whitelist = ['right', 'center', 'justify'];
+Quill.register(AlignStyle, true);
 
 // Quill에 폰트 사이즈 등록
 const Size = Quill.import('attributors/class/size');
@@ -176,9 +133,10 @@ const useImageResizeUpload = (quillRef, boardType) => {
 function BoardDetail() {
   const { articleId } = useParams(); // 수정할 게시글 ID 가져오기
   const [title, setTitle] = useState('');
+  const [writer, setWriter] = useState('');
   const [content, setContent] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(articleId !== 'write'); // 새 글 작성 모드일 때는 로딩 false
   const navigate = useNavigate();
   const location = useLocation();
   const quillRef = useRef(null);
@@ -199,16 +157,17 @@ function BoardDetail() {
   const modules = useMemo(() => {
     return {
       toolbar: {
-        container: [
-          [{ 'font': [] }],
-          [{ 'size': ['8px', '10px', '12px', '14px', '18px', '24px', '36px', '72px'] }],
-          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [{ color: [] }, { background: [] }],
-          [{ align: [] }],
-          [{ list: 'ordered' }, { list: 'bullet' }],
-          ['link', 'image', 'video'],
-          ['clean'],
-        ],
+        container:
+          [
+            [{ 'font': [] }],
+            [{ 'size': ['8px', '10px', '12px', '14px', '18px', '24px', '36px', '72px'] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ color: [] }, { background: [] }],
+            [{ align: [] }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link', 'image', 'video'],
+            ['clean'],
+          ],
         handlers: {
           image: () => {
             const editor = quillRef.current.getEditor();
@@ -300,70 +259,74 @@ function BoardDetail() {
           },
         },
       },
-      imageResize: {
-        modules: ['Resize', 'DisplaySize', 'Toolbar'],
-      },
+      imageResize: {}, // 이미지 리사이즈 모듈 추가
     };
   }, [boardType]);
 
-
   useImageResizeUpload(quillRef, boardType);
 
-  // 게시글 데이터 불러오기
   useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        if (articleId) {
+    if (articleId && articleId !== 'write') {
+      const fetchArticle = async () => {
+        try {
           const response = await fetch(`/api/board/${boardType}/articles/${articleId}`);
           if (!response.ok) throw new Error('게시글을 불러오는 데 실패했습니다.');
 
           const data = await response.json();
           setTitle(data.title);
           setContent(data.content);
+          setWriter(data.writer);
+        } catch (error) {
+          console.error('게시글 불러오기 실패:', error);
+          alert('게시글을 불러오는 중 문제가 발생했습니다.');
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error('게시글 불러오기 실패:', error);
-        alert('게시글을 불러오는 중 문제가 발생했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchArticle();
+      };
+      fetchArticle();
+    }
   }, [articleId, boardType]);
-
-  if (loading) {
-    return <div className="loading">로딩 중...</div>;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/board/${boardType}/articles/${articleId}`, {
-        method: 'PUT',
+      const url = articleId && articleId !== 'write' 
+        ? `/api/board/${boardType}/articles/${articleId}`
+        : `/api/board/${boardType}/articles`;
+      const method = articleId && articleId !== 'write' ? 'PUT' : 'POST';
+
+      const response = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           title,
           content,
+          writer,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('게시글 수정 실패');
+        throw new Error(articleId && articleId !== 'write' ? '게시글 수정 실패' : '게시글 작성 실패');
       }
 
-      alert('게시글이 성공적으로 수정되었습니다.');
-      navigate(-1);
+      alert(articleId && articleId !== 'write' ? '게시글이 성공적으로 수정되었습니다.' : '게시글이 성공적으로 작성되었습니다.');
+      navigate(`/board/${boardType}`);
     } catch (error) {
-      console.error('게시글 수정 실패:', error);
-      alert('게시글 수정 중 문제가 발생했습니다.');
+      console.error(articleId && articleId !== 'write' ? '게시글 수정 실패:' : '게시글 작성 실패:', error);
+      alert(articleId && articleId !== 'write' ? '게시글 수정 중 문제가 발생했습니다.' : '게시글 작성 중 문제가 발생했습니다.');
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
 
   const formats = [
     'header',
@@ -383,14 +346,14 @@ function BoardDetail() {
     'image',
     'video',
     'customVideo',
-    'width',    // 추가
-    'height',   // 추가
+    'width',
+    'height',
   ];
 
 
   return (
-    <div className="boarddetail-container">
-      <h1>게시글 수정</h1>
+    <div className="board-write-container">
+      <h2>{articleId && articleId !== 'write' ? '게시글 수정' : '새 글 작성'}</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -399,17 +362,23 @@ function BoardDetail() {
           onChange={(e) => setTitle(e.target.value)}
           required
         />
+        <input
+          type="text"
+          placeholder="작성자를 입력하세요"
+          value={writer}
+          onChange={(e) => setWriter(e.target.value)}
+          required
+        />
         <ReactQuill
           ref={quillRef}
           theme="snow"
           value={content}
           onChange={setContent}
           modules={modules}
-          formats={formats}
           placeholder="내용을 입력하세요"
         />
         <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? '수정 중...' : '수정'}
+          {isSubmitting ? (articleId && articleId !== 'write' ? '수정 중...' : '작성 중...') : (articleId && articleId !== 'write' ? '수정' : '작성')}
         </button>
       </form>
     </div>
