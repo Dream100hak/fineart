@@ -156,3 +156,35 @@
 .ql-size-72px {
   font-size: 72px;
 }
+
+
+.ql-container {
+  height: auto !important;
+}
+
+.ql-editor {
+  height: auto !important;
+  min-height: 200px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* 툴바가 컨텐츠 위에 고정되도록 설정 */
+.ql-toolbar.ql-snow {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: white;
+  border-bottom: 1px solid #ccc;
+}
+
+/* 에디터 컨테이너에 transition 효과 추가 */
+#editor {
+  transition: height 0.2s ease-in-out;
+}
+
+/* 이미지가 에디터 너비를 벗어나지 않도록 설정 */
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+}

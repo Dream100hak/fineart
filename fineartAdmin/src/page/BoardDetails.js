@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
-import ImageModule from './ImageModule';
-import './quill-image-module.css';
+import ImageResize from './ImageResizeModule';
+import './quill-resize-module.css';
 import './BoardDetails.css';
 
 
@@ -59,10 +59,16 @@ function BoardDetails() {
     };
   };
 
+  
+
   const initializeQuill = useCallback(() => {
     const editor = document.querySelector('#editor');
     if (editor && !quillRef.current) {
-      console.log('Editor found, initializing Quill...'); // 여기서 찍히는지 확인
+      console.log('Editor found, initializing Quill...');
+  
+      // 에디터 컨테이너에서 고정 높이 제거
+      editor.style.height = 'auto';
+      editor.style.minHeight = '200px'; // 최소 높이는 설정
   
       const quill = new Quill(editor, {
         theme: 'snow',
@@ -81,25 +87,37 @@ function BoardDetails() {
               image: imageHandler
             }
           },
-          imageModule: true // true로 변경
+          imageResize: {
+            modules: ['Resize', 'DisplaySize', 'Toolbar'], // Toolbar 모듈 추가
+            displayStyles: {
+              backgroundColor: 'black',
+              color: 'white',
+              padding: '5px 10px',
+              border: 'none',
+              borderRadius: '3px'
+            }
+          }
         },
         formats: ['header', 'size', 'bold', 'italic', 'underline', 'image', 'align']
       });
   
-      console.log('Quill initialized:', quill); // Quill 인스턴스 확인
-  
-      quillRef.current = quill;
-      
-      // 이미지 클릭 테스트를 위한 코드
-      quill.root.addEventListener('click', (e) => {
-        console.log('Root clicked:', e.target);  // 클릭 이벤트가 발생하는지 확인
+      // 컨텐츠 변경 시 높이 자동 조절
+      quill.on('text-change', () => {
+        const editorHeight = quill.root.scrollHeight;
+        editor.style.height = editorHeight + 'px';
       });
+  
+      console.log('Quill initialized:', quill);
+      quillRef.current = quill;
   
       if (content) {
         quill.root.innerHTML = content;
+        // 초기 컨텐츠 로드 후 높이 조절
+        const initialHeight = quill.root.scrollHeight;
+        editor.style.height = initialHeight + 'px';
       }
     }
-  }, [content, boardType]);
+  }, [content, imageHandler]);
 
   useEffect(() => {
     // DOM이 완전히 로드된 후 Quill 초기화
@@ -186,6 +204,7 @@ function BoardDetails() {
   }
 
   return (
+    
     <div className="board-details-container">
       <h2>{articleId === 'write' ? '새 게시글 작성' : '게시글 수정'}</h2>
       <form onSubmit={handleSubmit} className="edit-form">
@@ -203,14 +222,16 @@ function BoardDetails() {
         <div className="input-group">
           <label htmlFor="editor">내용</label>
           <div 
-            id="editor" 
-            style={{ 
-              height: "400px",
-              border: "1px solid #ccc",
-              backgroundColor: "white",
-              marginBottom: "20px"
-            }} 
-          />
+  id="editor" 
+  style={{ 
+    border: "1px solid #ccc",
+    backgroundColor: "white",
+    marginBottom: "20px",
+    minHeight: "200px", // 최소 높이 설정
+    height: "auto",     // 자동 높이 설정
+    overflowY: "hidden" // 스크롤바 제거
+  }} 
+/>
         </div>
         <div className="button-group">
           <button type="submit" className="submit-button">

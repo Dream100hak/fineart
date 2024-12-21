@@ -1,0 +1,165 @@
+/* 기본 이미지 스타일 */
+.ql-editor img {
+  max-width: 100%;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+/* 이미지 컨테이너 정렬 */
+.ql-editor p {
+  margin: 0;
+  padding: 0;
+}
+
+.ql-editor p[data-align="center"] {
+  text-align: center;
+}
+
+.ql-editor p[data-align="right"] {
+  text-align: right;
+}
+
+.ql-editor p[data-align="left"] {
+  text-align: left;
+}
+
+/* 리사이징 오버레이 스타일 */
+.image-resize-overlay {
+  position: absolute;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* 리사이징 핸들 스타일 */
+.image-resize-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
+  border: 1px solid #333;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 각 핸들의 위치 */
+.resize-handle-nw {
+  top: -4px;
+  left: -4px;
+  cursor: nw-resize;
+}
+
+.resize-handle-ne {
+  top: -4px;
+  right: -4px;
+  cursor: ne-resize;
+}
+
+.resize-handle-sw {
+  bottom: -4px;
+  left: -4px;
+  cursor: sw-resize;
+}
+
+.resize-handle-se {
+  bottom: -4px;
+  right: -4px;
+  cursor: se-resize;
+}
+
+/* 리사이징 프리뷰 스타일 */
+.resize-preview-overlay {
+  position: absolute;
+  border: 2px dashed #0066cc;
+  background: rgba(219, 234, 254, 0.3);
+  pointer-events: none;
+  z-index: 1000;
+  transition: none;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* 크기 표시 스타일 */
+.image-size-display {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+/* 리사이징 중인 이미지 스타일 */
+.image-resizing {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+/* 툴바 스타일 */
+.image-toolbar {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background-color: rgba(26, 26, 26, 0.95);
+  border: 1px solid #333;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+/* 툴바 버튼 스타일 */
+.image-toolbar button {
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 3px;
+  padding: 4px;
+  margin: 0 2px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.image-toolbar button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #444;
+}
+
+.image-toolbar button:active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 툴바 아이콘 스타일 */
+.image-toolbar button svg {
+  width: 16px;
+  height: 16px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2px;
+  transition: all 0.2s ease;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+  .image-resize-handle {
+    width: 12px;
+    height: 12px;
+  }
+
+  .image-toolbar {
+    top: -40px;
+    height: 40px;
+  }
+}
