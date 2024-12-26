@@ -1,190 +1,128 @@
 /* BoardDetails.css */
-
 .board-details-container {
-  width: 80%;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.article-content {
-  text-align: left;
-}
-
-.article-content h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-.article-content p {
-  font-size: 1.2rem;
-  line-height: 1.6;
-}
-
-.actions {
-  margin-top: 20px;
-}
-
-.actions button {
-  margin-right: 10px;
-  padding: 10px 15px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.actions button:hover {
-  background-color: #0056b3;
+.board-details-container h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #eceef1;
 }
 
 .edit-form {
   display: flex;
   flex-direction: column;
+  gap: 1.5rem;
 }
 
-.edit-form input[type="text"],
-.edit-form textarea {
-  margin-bottom: 15px;
-  padding: 10px;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  font-weight: 600;
+  color: #4a5568;
 }
 
-.edit-form button {
-  margin-right: 10px;
-  padding: 10px 15px;
+.input-group input,
+.input-group textarea {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.submit-button,
+.cancel-button {
+  padding: 0.75rem 1.5rem;
   border: none;
-  background-color: #28a745;
-  color: white;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 }
 
-.edit-form button:hover {
-  background-color: #218838;
+.submit-button {
+  background-color: #4299e1;
+  color: white;
 }
 
-.edit-form button:last-of-type {
-  background-color: #dc3545;
+.submit-button:hover {
+  background-color: #3182ce;
 }
 
-.edit-form button:last-of-type:hover {
-  background-color: #c82333;
+.cancel-button {
+  background-color: #e2e8f0;
+  color: #4a5568;
 }
 
-/* 폰트 사이즈 레이블 설정 */
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="8px"]::before {
-  content: '8px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="10px"]::before {
-  content: '10px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="12px"]::before {
-  content: '12px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="14px"]::before {
-  content: '14px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="18px"]::before {
-  content: '18px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="24px"]::before {
-  content: '24px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="36px"]::before {
-  content: '36px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="72px"]::before {
-  content: '72px';
+.cancel-button:hover {
+  background-color: #cbd5e0;
 }
 
-/* 선택된 폰트 사이즈 레이블 설정 */
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="8px"]::before {
-  content: '8px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="10px"]::before {
-  content: '10px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="12px"]::before {
-  content: '12px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="14px"]::before {
-  content: '14px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="18px"]::before {
-  content: '18px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="24px"]::before {
-  content: '24px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="36px"]::before {
-  content: '36px';
-}
-.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="72px"]::before {
-  content: '72px';
+/* Quill Editor Customization */
+#editor {
+  border: 2px solid #e2e8f0 !important;
+  border-radius: 8px;
+  min-height: 300px;
 }
 
-
-.ql-size-8px {
-  font-size: 8px;
-}
-.ql-size-10px {
-  font-size: 10px;
-}
-.ql-size-12px {
-  font-size: 12px;
-}
-.ql-size-14px {
-  font-size: 14px;
-}
-.ql-size-18px {
-  font-size: 18px;
-}
-.ql-size-24px {
-  font-size: 24px;
-}
-.ql-size-36px {
-  font-size: 36px;
-}
-.ql-size-72px {
-  font-size: 72px;
+.ql-toolbar.ql-snow {
+  border: 2px solid #e2e8f0 !important;
+  border-bottom: none !important;
+  border-radius: 8px 8px 0 0;
+  background-color: #f8fafc;
 }
 
-
-.ql-container {
-  height: auto !important;
+.ql-container.ql-snow {
+  border: 2px solid #e2e8f0 !important;
+  border-top: none !important;
+  border-radius: 0 0 8px 8px;
 }
 
 .ql-editor {
-  height: auto !important;
-  min-height: 200px;
-  padding: 20px;
-  overflow: hidden;
+  min-height: 300px;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
-/* 툴바가 컨텐츠 위에 고정되도록 설정 */
-.ql-toolbar.ql-snow {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: white;
-  border-bottom: 1px solid #ccc;
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #4a5568;
+  font-size: 1.2rem;
 }
 
-/* 에디터 컨테이너에 transition 효과 추가 */
-#editor {
-  transition: height 0.2s ease-in-out;
-}
-
-/* 이미지가 에디터 너비를 벗어나지 않도록 설정 */
-.ql-editor img {
-  max-width: 100%;
-  height: auto;
+/* Error Messages */
+.error-message {
+  color: #e53e3e;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }

@@ -1,88 +1,226 @@
 /* BoardList.css */
-
 .board-list {
   width: 90%;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .board-list h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #333;
-  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #edf2f7;
 }
 
+/* 글 작성 버튼 스타일 */
 .create-button {
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  border: none;
-  background-color: #28a745;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #4299e1;
   color: white;
-  border-radius: 5px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
 }
 
 .create-button:hover {
-  background-color: #218838;
+  background-color: #3182ce;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);
 }
 
+.create-button:active {
+  transform: translateY(0);
+}
+
+/* 테이블 스타일 */
 .board-list table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 1rem;
 }
 
 .board-list th,
 .board-list td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .board-list th {
-  background-color: #f4f4f4;
-  color: #333;
-  font-weight: bold;
+  background-color: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.board-list tr:nth-child(even) {
-  background-color: #f9f9f9;
+.board-list th:first-child {
+  border-top-left-radius: 8px;
 }
 
-.board-list tr:hover {
-  background-color: #f1f1f1;
+.board-list th:last-child {
+  border-top-right-radius: 8px;
 }
 
-.board-list button {
-  padding: 8px 12px;
-  margin-right: 5px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
+/* 테이블 행 스타일 */
+.board-list tbody tr {
+  transition: all 0.2s ease;
+}
+
+.board-list tbody tr:hover {
+  background-color: #f7fafc;
   cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.board-list button:hover {
-  background-color: #0056b3;
+/* 테이블 열 너비 조정 */
+.board-list table th:nth-child(1),
+.board-list table td:nth-child(1) {
+  width: 50%;
+  padding-left: 1.5rem;
 }
 
-.loading {
+.board-list table th:nth-child(2),
+.board-list table td:nth-child(2) {
+  width: 15%;
+}
+
+.board-list table th:nth-child(3),
+.board-list table td:nth-child(3) {
+  width: 20%;
+}
+
+.board-list table th:nth-child(4),
+.board-list table td:nth-child(4) {
+  width: 8%;
   text-align: center;
-  font-size: 1.5rem;
-  color: #555;
-  margin-top: 50px;
 }
 
+.board-list table th:nth-child(5),
+.board-list table td:nth-child(5) {
+  width: 7%;
+  text-align: center;
+}
+
+/* 제목 스타일 */
+.board-list td:first-child {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.board-list td:first-child:hover {
+  color: #4299e1;
+}
+
+/* 작성자 스타일 */
+.board-list td:nth-child(2) {
+  color: #4a5568;
+  font-weight: 500;
+}
+
+/* 날짜 스타일 */
+.board-list td:nth-child(3) {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* 조회수 스타일 */
+.board-list td:nth-child(4) {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+/* 수정 버튼 스타일 */
+.board-list td button {
+  padding: 0.5rem 1rem;
+  background-color: #edf2f7;
+  color: #4a5568;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.board-list td button:hover {
+  background-color: #e2e8f0;
+  color: #2d3748;
+}
+
+/* 로딩 상태 스타일 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #4a5568;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* 게시글 없음 상태 스타일 */
 .no-articles {
   text-align: center;
-  font-size: 1.2rem;
-  color: #777;
-  margin-top: 30px;
+  padding: 3rem 0;
+  color: #718096;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .board-list {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .board-list table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .board-list th,
+  .board-list td {
+    padding: 0.75rem;
+  }
+
+  .create-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* 테이블 스크롤바 스타일 */
+.board-list table::-webkit-scrollbar {
+  height: 8px;
+}
+
+.board-list table::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.board-list table::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 4px;
+}
+
+.board-list table::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
 }

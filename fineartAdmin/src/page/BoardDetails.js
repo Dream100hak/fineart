@@ -18,6 +18,7 @@ function BoardDetails() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
+  const [writer, setWriter] = useState('');
   const quillRef = useRef(null);
   const navigate = useNavigate();
 
@@ -27,31 +28,31 @@ function BoardDetails() {
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
     input.click();
-  
+
     input.onchange = async () => {
       const file = input.files[0];
       const formData = new FormData();
       formData.append('image', file);
-  
+
       try {
         const response = await axios.post(`/api/board/${boardType}/upload/image`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-  
+
         // response.data.url로 변경 (imageUrl -> url)
         const imageUrl = response.data.url;
         console.log('Image URL:', imageUrl); // 확인용 로그
-  
+
         const quill = quillRef.current;
         const range = quill.getSelection(true);
-  
+
         // 이미지 삽입
         quill.insertText(range.index, '\n');
         quill.insertEmbed(range.index + 1, 'image', imageUrl);
         quill.setSelection(range.index + 2);
-  
+
       } catch (error) {
         console.error('이미지 업로드 실패:', error);
         alert('이미지 업로드에 실패했습니다.');
@@ -59,16 +60,16 @@ function BoardDetails() {
     };
   };
 
-  
+
 
   const initializeQuill = useCallback(() => {
     const editor = document.querySelector('#editor');
     if (editor && !quillRef.current) {
       console.log('Editor found, initializing Quill...');
   
-      // 에디터 컨테이너에서 고정 높이 제거
+      // 에디터 초기 스타일 설정
       editor.style.height = 'auto';
-      editor.style.minHeight = '200px'; // 최소 높이는 설정
+      editor.style.minHeight = '300px'; // 최소 높이 설정
   
       const quill = new Quill(editor, {
         theme: 'snow',
@@ -88,7 +89,7 @@ function BoardDetails() {
             }
           },
           imageResize: {
-            modules: ['Resize', 'DisplaySize', 'Toolbar'], // Toolbar 모듈 추가
+            modules: ['Resize', 'DisplaySize', 'Toolbar'],
             displayStyles: {
               backgroundColor: 'black',
               color: 'white',
@@ -101,20 +102,34 @@ function BoardDetails() {
         formats: ['header', 'size', 'bold', 'italic', 'underline', 'image', 'align']
       });
   
-      // 컨텐츠 변경 시 높이 자동 조절
+      // 컨텐츠 변경 시 자동 높이 조절
+      const updateEditorHeight = () => {
+        const editorRoot = quill.root;
+        const scrollHeight = editorRoot.scrollHeight;
+        editor.style.height = 'auto';
+        editor.style.height = scrollHeight + 'px';
+        editorRoot.style.height = 'auto';
+      };
+  
+      // 텍스트 변경 이벤트에 높이 조절 함수 연결
       quill.on('text-change', () => {
-        const editorHeight = quill.root.scrollHeight;
-        editor.style.height = editorHeight + 'px';
+        updateEditorHeight();
       });
   
-      console.log('Quill initialized:', quill);
+      // 이미지 로드 완료 시 높이 재조정
+      quill.root.addEventListener('load', (event) => {
+        if (event.target.tagName === 'IMG') {
+          updateEditorHeight();
+        }
+      }, true);
+  
       quillRef.current = quill;
   
+      // 초기 컨텐츠가 있는 경우 설정
       if (content) {
         quill.root.innerHTML = content;
         // 초기 컨텐츠 로드 후 높이 조절
-        const initialHeight = quill.root.scrollHeight;
-        editor.style.height = initialHeight + 'px';
+        setTimeout(updateEditorHeight, 0);
       }
     }
   }, [content, imageHandler]);
@@ -137,10 +152,11 @@ function BoardDetails() {
 
       try {
         const response = await axios.get(`/api/board/${boardType}/articles/${articleId}`);
-        const { title: articleTitle, content: articleContent } = response.data;
-        
+        const { title: articleTitle, content: articleContent, writer: articleWriter } = response.data;
+
         setTitle(articleTitle);
         setContent(articleContent);
+        setWriter(articleWriter);
       } catch (error) {
         console.error('게시글 조회 실패:', error);
         alert('게시글을 불러오는데 실패했습니다.');
@@ -160,6 +176,11 @@ function BoardDetails() {
       return;
     }
 
+    if (!writer.trim()) {
+      alert('작성자를 입력해주세요.');
+      return;
+    }
+
     if (!quillRef.current.root.innerHTML.trim()) {
       alert('내용을 입력해주세요.');
       return;
@@ -167,6 +188,7 @@ function BoardDetails() {
 
     const articleData = {
       title,
+      writer,
       content: quillRef.current.root.innerHTML,
       boardType
     };
@@ -204,7 +226,7 @@ function BoardDetails() {
   }
 
   return (
-    
+
     <div className="board-details-container">
       <h2>{articleId === 'write' ? '새 게시글 작성' : '게시글 수정'}</h2>
       <form onSubmit={handleSubmit} className="edit-form">
@@ -220,18 +242,29 @@ function BoardDetails() {
           />
         </div>
         <div className="input-group">
+          <label htmlFor="writer">작성자</label>
+          <input
+            type="text"
+            id="writer"
+            value={writer}
+            onChange={(e) => setWriter(e.target.value)}
+            placeholder="작성자를 입력하세요"
+            required
+          />
+        </div>
+        <div className="input-group">
           <label htmlFor="editor">내용</label>
-          <div 
-  id="editor" 
-  style={{ 
-    border: "1px solid #ccc",
-    backgroundColor: "white",
-    marginBottom: "20px",
-    minHeight: "200px", // 최소 높이 설정
-    height: "auto",     // 자동 높이 설정
-    overflowY: "hidden" // 스크롤바 제거
-  }} 
-/>
+          <div
+            id="editor"
+            style={{
+              border: "1px solid #ccc",
+              backgroundColor: "white",
+              marginBottom: "20px",
+              minHeight: "200px", // 최소 높이 설정
+              height: "auto",     // 자동 높이 설정
+              overflowY: "hidden" // 스크롤바 제거
+            }}
+          />
         </div>
         <div className="button-group">
           <button type="submit" className="submit-button">
